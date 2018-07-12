@@ -1,0 +1,60 @@
+/*Others*/
+.underline{border-bottom:1px solid #777777;margin-bottom:15px;}
+/*navbar*/
+.navbar-brand{margin:0;width:120px;height:110px;}
+.navbar-brand img{width:100%;}
+.logo-mobile{display:none}
+.logo-pc{display:inherit;}
+.nav-collapse{display:flex;justify-content:center}
+.nav-link{margin-left: 10px;margin-right:10px;font-size:1.125em;}
+
+/*steps*/
+.stepLine{display:inline-flex;}
+.Steps{font-size:0.85em;}
+/*Container check in check out*/
+.container-checkIn{display:flex}
+.input{padding:.1rem !important;}
+.input-btn{margin-top:1.5rem ;}
+/*tablet*/
+@media (max-width: 1028px) {
+	/*backgrounnd main +others*/
+	
+	/*navbar*/
+	.navbar-brand{margin:0;width:75px;height:75px;}
+	
+	.nav-collapse{display:initial;}
+	.nav-link{margin-left:5px;margin-right:5px;font-size:1em;}
+	.navbar.navbar-toggler-icon{border-color: white}
+	.txt{font-size:3em;}
+
+	/*steps*/
+
+	.stepLine h4{font-size:1em;}
+	/*Container check in check out*/
+	.container-checkIn{display:initial}
+	.input{max-width:100%}
+
+	
+}
+/*Mobile*/
+@media (max-width: 668px) {
+	/*backgrounnd main +others*/
+	
+	/*navbar*/
+	.navbar-brand{margin:0;width:75px;height:75px;}
+	.logo-mobile{display:inherit;}
+	.logo-pc{display:none}
+	.nav-collapse{display:initial;}
+	.nav-link{margin-left:5px;margin-right:5px;font-size:1em;}
+	.navbar.navbar-toggler-icon{border-color: white}
+	
+
+	/*steps*/
+	.stepLine{display:initial;border:0;}
+	.stepHide{display:none}
+	.stepActive{font-size:1.225em;text-align:center;border-bottom:1px solid #777777;margin-bottom:15px}
+
+	/*Container check in check out*/
+	.container-checkIn{display:initial;}
+	
+}

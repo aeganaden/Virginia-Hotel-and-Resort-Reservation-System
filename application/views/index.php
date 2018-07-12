@@ -1,36 +1,27 @@
 	<div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12 container-main"style="padding:0">
 		
 		<?php $this->load->view('includes/socialmedia'); ?>
-		
-		
 		<?php $this->load->view('includes/nav'); ?>
 		
 		<div class="col-lg-12 col-sm-12 col-xs-12 bgImage">
 			<div class="d-flex flex-column overlay justify-content-center"align="center">
-				<h6 class="text-light"style="font-family: Quicksand, sans-serif">Welcome to</h6>
-				<h1 class="text-warning"style="font-family: Quicksand, sans-serif; margin-bottom: 2px;font-weight:bold">Virginia & Boy</h1>
-				<h5 class="text-light"style="font-family: Quicksand, sans-serif">Lodge and Resort</h5>
-				<h6 class="text-light"style="font-family: Quicksand, sans-serif">Lorem ipsum dolor sit amet,adipiscing consectetur adipiscing </h6>
-				<h6 class="text-light"style="font-family: Quicksand, sans-serif">consectetur adipiscing elit nullam </h6>
-				<div class="col-lg-3 col-sm-3 col-xs-5">
-					<a href="#containerAbout">
-						<button type="button" class="btn btn-primary">Explore</button>
-					</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-lg-12 col-sm-12 col-xs-12 container-checkin">
-			<div class="bg-dark col-lg-10 col-sm-10 col-xs-12 container-checkin-main">
-				<div class="row row-checkin d-flex justify-content-around">
-					<div class=" col-lg-4 col-sm-4 form-group">
-						<input type="date" class="form-control">
-					</div>
-					<div class=" col-lg-4  col-sm-4 form-group">
-						<input type="date" class="form-control">
-					</div>
-					
-					<div class=" col-lg-4 col-sm-3 form-group btn-availability ">
-						<input type="submit" class="btn-control btn btn-warning text-light color-yellow" value="BOOK NOW">
+				<h1 class="text-light"style="font-family: Quicksand, sans-serif">Welcome to</h1>
+				<p class="text-warning"style="font-family: Quicksand, sans-serif; margin-bottom: 2px;font-weight:bold; font-size: 3vw;">Virginia & Boy</p>
+				<h4 class="text-light"style="font-family: Quicksand, sans-serif">Lodge and Resort</h4>
+				<h5 class="text-light"style="font-family: Quicksand, sans-serif">Lorem ipsum dolor sit amet,adipiscing consectetur adipiscing </h5>
+				<h5 class="text-light"style="font-family: Quicksand, sans-serif">consectetur adipiscing elit nullam </h5>
+
+
+
+				<div class="col-lg-6 col-sm-3 col-xs-5" style="padding: 3% 0">
+					<div class="btn-group" role="group" aria-label="Basic example">
+						<a href="#containerAbout" style="color: white">
+							<button type="button" class="btn btn-lg btn-primary">Know More</button>
+						</a>
+						|
+						<a href="<?=base_url()?>Reservation" style="color: white"> 
+							<button type="button" class="btn btn-lg color-yellow">Book Now</button> 
+						</a>
 					</div>
 				</div>
 			</div>
@@ -58,7 +49,7 @@
 							<a href="#" class="text-light">Click here</a>
 						</p>	
 					</div>
-					
+
 				</div>
 			</div>	
 			<div class="col-lg-4 col-sm-4 col-xs-12 bg-light inner">
@@ -70,7 +61,7 @@
 							<a href="#" class="text-light">Click here</a>
 						</p>	
 					</div>
-					
+
 				</div>
 			</div>	
 			<div class="col-lg-4 col-sm-4 col-xs-12 bg-light inner">
@@ -82,7 +73,7 @@
 							<a href="#" class="text-light">Click here</a>
 						</p>	
 					</div>
-					
+
 				</div>
 			</div>	
 		</div>
