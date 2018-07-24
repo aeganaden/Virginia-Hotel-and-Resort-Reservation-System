@@ -18,11 +18,22 @@
 						<a href="#containerAbout" style="color: white">
 							<button type="button" class="btn btn-lg btn-primary">Know More</button>
 						</a>
-						|
+						&nbsp
 						<a href="<?=base_url()?>Reservation" style="color: white"> 
 							<button type="button" class="btn btn-lg color-yellow">Book Now</button> 
 						</a>
 					</div>
+					<form id="viewReservationForm" onsubmit="appendCode()" action="" method="post" class="form-inline col-lg-6 col-sm-3 col-xs-5 pt-5">
+						<div class="input-group mb-2 mr-sm-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">#</div>
+							</div>
+							<input type="text" class="form-control" id="transaction_id" placeholder="Transaction Code">
+						</div>
+
+
+						<button type="submit" class="btn btn-primary mb-2">View</button>
+					</form>
 				</div>
 			</div>
 		</div> 

@@ -47,7 +47,7 @@
 	.nav-collapse{display:flex;justify-content:center}
 	.nav-link{margin-left: 10px;margin-right:10px;font-size:1.125em;}
 	.txt{font-size:14em;}
-
+	.disabled-date{color: red !important;}
 
 	input[type="date"]::-webkit-inner-spin-button {
 		opacity: 0
