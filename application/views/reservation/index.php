@@ -176,7 +176,24 @@
 	<div class="jumbotron col-xl-12 col-lg-12 col-sm-12 col-xs-12">
 		<!-- ROOM PAX INFORMATION -->
 		<div class="row">
-			<h6 class="p-2 text-muted">Note: If you exceed the total PAX, you will be charged P500</h6>
+			<h6 class="p-2 text-muted"><b>NOTE:</b> 
+				<ul>
+					<li>If you exceed the total PAX, you will be charged <b>P500</b></li>
+					<li>For reservation who have length of stay that is less than 2 days. Entrance Fee will be charged:</li>
+					<ul>
+						<li> <b>Day Time Entrance Fee</b></li>
+						<ul>
+							<li>Adults - <b>P80</b></li>
+							<li>Child below 4ft - <b>P50</b></li>
+						</ul>
+						<li><b> Night Time Entrance Fee</b></li>
+						<ul>
+							<li>Adults - <b>P100</b></li>
+							<li>Child below 4ft - <b>P70</b></li>
+						</ul>
+					</ul>
+				</ul>
+			</h6>
 			<div class="d-inline-flex col-lg-12 col-sm-12 col-xs-12 paxInfoDiv">
 			</div>
 		</div>

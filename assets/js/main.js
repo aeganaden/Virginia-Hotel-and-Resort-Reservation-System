@@ -120,98 +120,98 @@ let stayTypeChk = null;
 /*=====  End of GLOBAL VARIABLES  ======*/
 
 
- /*===========================================
- =            RESERVATION CHECKER            =
- ===========================================*/
- 
- function disableReservedDates(selectedRoomsID) {
-  let reservedDatesAjax = [];
+//  /*===========================================
+//  =            RESERVATION CHECKER            =
+//  ===========================================*/
 
-  // GET DATES
-  $.ajax({
-    url: base_url+'Reservation/checkReservation',
-    type: 'post',
-    dataType: 'json',
-    data: {
-      selectedRoomsID
-    },
-    success: function(data){
+//  function disableReservedDates(selectedRoomsID) {
+//   let reservedDatesAjax = [];
 
-      for($i=0; $i<data.length;$i++){
-        let start = new Date(data[$i]['in']);
-        let end = new Date(data[$i]['out']);
+//   // GET DATES
+//   $.ajax({
+//     url: base_url+'Reservation/checkReservation',
+//     type: 'post',
+//     dataType: 'json',
+//     data: {
+//       selectedRoomsID
+//     },
+//     success: function(data){
 
-        var options = { 
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit"
-        };
-          // GET DATES BETWEEN 
-          let datesBetweenAjax = getDates(start,end);
-          datesBetweenAjax.forEach(element => {
-            element = element.toLocaleString('en-US',options).split(",")[0];
-            reservedDatesAjax.push(element)
-          });
-          // DATEPICKER UPDATE, SETTING RESERVED DATES TO DISABLED DATES
+//       for($i=0; $i<data.length;$i++){
+//         let start = new Date(data[$i]['in']);
+//         let end = new Date(data[$i]['out']);
 
-        }
+//         var options = { 
+//           year: "numeric",
+//           month: "2-digit",
+//           day: "2-digit"
+//         };
+//           // GET DATES BETWEEN 
+//           let datesBetweenAjax = getDates(start,end);
+//           datesBetweenAjax.forEach(element => {
+//             element = element.toLocaleString('en-US',options).split(",")[0];
+//             reservedDatesAjax.push(element)
+//           });
+//           // DATEPICKER UPDATE, SETTING RESERVED DATES TO DISABLED DATES
 
-
-        $('.input-daterange input').each(function() {
-          $('.datepicker').datepicker().on("show", function(e) {
-            $('.disabled-date').tooltip({
-              "title": "Reserved"
-            });
-          }); 
-          $(this).datepicker('setDatesDisabled', reservedDatesAjax);
-          reservedDates = reservedDatesAjax;
-        });  
-      }
-    });
-
-}
+//         }
 
 
-// VALIDATION FOR INBETWEEN RESERVED DATES
-$('.datepicker').datepicker().on('changeDate', function (ev) {
+//         $('.input-daterange input').each(function() {
+//           $('.datepicker').datepicker().on("show", function(e) {
+//             $('.disabled-date').tooltip({
+//               "title": "Reserved"
+//             });
+//           }); 
+//           $(this).datepicker('setDatesDisabled', reservedDatesAjax);
+//           reservedDates = reservedDatesAjax;
+//         });  
+//       }
+//     });
 
-  // GATHER DATES DATA
-  let start = $('.startDate').datepicker('getDate');   
-  let end = $('.endDate').datepicker('getDate');  
-  let checker = false;
-  // GET DATES BETWEEN
-  let datesBetween = getDates(start,end);
-
-   // FORMAT DATE FOR DATE CHECKING
-   datesBetween.forEach(function(element){
-    var options = { 
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    };
-    var element = element.toLocaleString('en-US',options).split(",")[0];
+// }
 
 
-    if ( $.inArray(element, reservedDates) > -1 ) {
-      checker = true;
+// // VALIDATION FOR INBETWEEN RESERVED DATES
+// $('.datepicker').datepicker().on('changeDate', function (ev) {
 
-      $("#alertDiv").show('400', function() {
-        $("#alertDiv span").text('Your selected range overlap an existing reserved date/s');
-        $(this).css('display', 'block');
-        $('.startDate').datepicker('update', '');
-        $('.endDate').datepicker('update', '');
-      });
-    } 
-  });
+//   // GATHER DATES DATA
+//   let start = $('.startDate').datepicker('getDate');   
+//   let end = $('.endDate').datepicker('getDate');  
+//   let checker = false;
+//   // GET DATES BETWEEN
+//   let datesBetween = getDates(start,end);
 
-   if (checker == false) {
-    $("#alertDiv").hide('400', function() { 
-    });
-  }
+//    // FORMAT DATE FOR DATE CHECKING
+//    datesBetween.forEach(function(element){
+//     var options = { 
+//       year: "numeric",
+//       month: "2-digit",
+//       day: "2-digit"
+//     };
+//     var element = element.toLocaleString('en-US',options).split(",")[0];
 
-});
 
-/*=====  End of RESERVATION CHECKER  ======*/
+//     if ( $.inArray(element, reservedDates) > -1 ) {
+//       checker = true;
+
+//       $("#alertDiv").show('400', function() {
+//         $("#alertDiv span").text('Your selected range overlap an existing reserved date/s');
+//         $(this).css('display', 'block');
+//         $('.startDate').datepicker('update', '');
+//         $('.endDate').datepicker('update', '');
+//       });
+//     } 
+//   });
+
+//    if (checker == false) {
+//     $("#alertDiv").hide('400', function() { 
+//     });
+//   }
+
+// });
+
+// /*=====  End of RESERVATION CHECKER  ======*/
 
 
 
@@ -341,13 +341,13 @@ $(".btnProceed").click(function(event) {
             totalPax+= roomPax;
           }
         });  
-          htmlDivPax += ' || <h6 class="p-2 text-muted">TOTAL PAX :  <span class="text-primary">'+totalPax+' PAX</span> </h6>'; 
+          htmlDivPax += ' || <h6 class="p-2 text-muted">MAXIMUM PAX :  <span class="text-primary">'+totalPax+' PAX</span> </h6>'; 
           $(".paxInfoDiv").html(htmlDivPax); 
 
 
           // GO TO THE NEXT STEP
           nextStep(1);
-          disableReservedDates(roomID);
+          // disableReservedDates(roomID);
         }); 
 
       }
@@ -411,7 +411,29 @@ $(".btnProceed").click(function(event) {
       // SET VALUES TO SPAN ATTRIBUTES
       $(".checkInText").text(start.toLocaleString('en-US',options).split(","));
       $(".checkOutText").text(end.toLocaleString('en-US',options).split(","));
-      $(".totalDays").text(diff+" Days");
+      $(".totalDays").text(diff+" Day/s");
+
+      // ADDING MISC / ENTRANCE FEE
+      let entrance_fee = 0;
+      // SET TO NULL 
+      $(".feeCosts").html("");
+      if (parseInt(diff) < 2) {
+        console.log("less than");
+        if (stayTypeChk == 1) { 
+          entrance_fee = (inputAdult * 80) + (inputChild * 50);
+          $(".feeCosts").append("<p>Adult ("+inputAdult+") - P"+(inputAdult * 80).toLocaleString()+"</p>"); 
+          $(".feeCosts").append("<p>Child ("+inputChild+") - P"+(inputChild * 50).toLocaleString()+"</p>"); 
+          $(".feeCosts").append("<hr>"); 
+          $(".feeCosts").append("<p>Entrance Fee - P"+entrance_fee.toLocaleString()+"</p>");
+
+        }else{ 
+          entrance_fee = (inputAdult * 100) + (inputChild * 70);
+          $(".feeCosts").append("<p>Adult ("+inputAdult+") - P"+(inputAdult * 100).toLocaleString()+"</p>"); 
+          $(".feeCosts").append("<p>Child ("+inputChild+") - P"+(inputChild * 70).toLocaleString()+"</p>"); 
+          $(".feeCosts").append("<p>Entrance Fee - P"+entrance_fee.toLocaleString()+"</p>");
+
+        }
+      }
 
       // CALCULATE TOTAL TAX 
       let userPax = parseInt(inputAdult) + parseInt(inputChild); 
@@ -420,12 +442,12 @@ $(".btnProceed").click(function(event) {
 
       if (totalPax < userPax) { 
         feeCosts = 500;
-        $(".feeCosts").text(feeCosts.toLocaleString());
+        $(".feeCosts").append("<p>Add. Pax. - P"+feeCosts.toLocaleString()+"</p>");
       }else{
-        $(".feeCosts").text("-"); 
+
       }
-      let totalTax = ((totalRoomPrice + feeCosts)*diff) * tax;
-      totalCharge = ((totalRoomPrice + feeCosts)*diff) + totalTax;
+      let totalTax = ((totalRoomPrice + feeCosts + entrance_fee)*diff) * tax;
+      totalCharge = ((totalRoomPrice + feeCosts + entrance_fee)*diff) + totalTax;
       $(".taxFee").text('P'+totalTax.toLocaleString('en'));
 
       $(".totalCharge").text('P'+totalCharge.toLocaleString('en'));
@@ -453,10 +475,12 @@ $(".btnProceed").click(function(event) {
       if (qty > 0) {  
         let roomName = $("#roomName"+roomId).text(); 
         htmlDivCheckout +=  '<h6>'+roomName+'</h6>';
-        allReservedRoomType.push(roomId);
+        // allReservedRoomType.push(roomId);
         allReservedRoomQty.push(qty);
-      }
-    });
+      }else{
+       allReservedRoomQty.push(0);
+     }
+   });
 
     $(".roomsText").html(htmlDivCheckout);
 
@@ -528,19 +552,20 @@ $(".btnProceed").click(function(event) {
         allReservedRoomQty,
         stayTypeChk,
         comment,
-        allReservedRoomType, 
+        // allReservedRoomType, 
         fname,
         lname,
         gender,
         phone,
         address,
         email, 
+        totalCharge,
       },success: function(data){ 
         console.log(data)
         if (data[0] == true) {
           swal({
             title: "TRANSACTION KEY: "+data[1],
-            text: "Get a pen and paper, take down this IMPORTANT transaction key. This will serve as your code to view and edit your reservation ",
+            text: "Get a pen and paper, take down this IMPORTANT transaction key. This will serve as your code to view, edit, and as well as pay your reservation.",
             icon: "warning",
             buttons: "Proceed",
             closeOnClickOutside: false, 
@@ -791,26 +816,8 @@ function previousStep(currentStep) {
   /*=====  End of BreadCrumbs  ======*/
 
 
-
 });
 
 
-function appendCode(){
-  let transactionID = $("#transaction_id").val();
-  $.ajax({
-    url: base_url+'Reservation/reservationExists',
-    type: 'post',
-    dataType: 'json',
-    data: {transactionID},
-    success: function(data){ 
-      if (data == true) {
-        var action_src = base_url + "Reservation/viewReservation/" +transactionID;
-        var form = document.getElementById('viewReservationForm');
-        window.location.href = action_src;
-      }else{
-        alert('Reservation does not exists.')
-      }
-    }
-  });
-  
-}
+
+

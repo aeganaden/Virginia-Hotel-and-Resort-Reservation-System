@@ -20,6 +20,16 @@ class Crud extends CI_Model {
 		return ($query->num_rows() > 0) ? $query->result() : FALSE;
 	}
 
+	public function getSum($table,$column,$where = NULL)
+	{
+		if (!empty($where)) {
+			$this->db->where($where); 
+		}
+		$query = $this->db->select_sum($column);
+		$query = $this->db->get($table);
+		return ($query->num_rows() > 0) ? $query->result() : FALSE;
+	}
+
 	public function fetch_last($table, $column, $where = NULL) {
 		if (!empty($where)) {
 			$this->db->where($where);

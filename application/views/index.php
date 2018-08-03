@@ -23,10 +23,10 @@
 							<button type="button" class="btn btn-lg color-yellow">Book Now</button> 
 						</a>
 					</div>
-					<form id="viewReservationForm" onsubmit="appendCode()" action="" method="post" class="form-inline col-lg-6 col-sm-3 col-xs-5 pt-5">
+					<form id="viewReservationForm" onsubmit="appendCode()" action="" method="post" class="form-inline col-lg-7 col-sm-3 col-xs-5 pt-5">
 						<div class="input-group mb-2 mr-sm-2">
 							<div class="input-group-prepend">
-								<div class="input-group-text">#</div>
+								<div class="input-group-text">TRANS ID -</div>
 							</div>
 							<input type="text" class="form-control" id="transaction_id" placeholder="Transaction Code">
 						</div>

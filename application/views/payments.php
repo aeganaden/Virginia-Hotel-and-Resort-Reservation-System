@@ -1,0 +1,202 @@
+	<?php 
+	$reservation = $this->Crud->fetch('reservation',array('reservation_key'=>$transactionID)); 
+	if ($reservation) {
+		$guest = $this->Crud->fetch('guest',array('guest_id'=>$reservation[0]->guest_id));
+		$guest = $guest[0];
+		$fullname = $guest->guest_firstname." ".$guest->guest_lastname;
+	}
+	?>
+	<?php if ($reservation): ?>
+		<?php $this->load->view('includes/materialize/sidenav', compact('fullname','guest','reservation')); ?>
+
+		<div class="row" id="content">
+			<div class="col s1"></div> 
+			<div class="col s10"> 
+				<div class="row">
+					<blockquote class="color-o-ac3"> 
+						<h4 class="black-text" style="font-weight: 300">
+							PAYMENTS <?= $reservation[0]->reservation_payment_status != 0 ? "- <span class='green-text'>SUBMITTED</span>" : "";  ?>
+						</h4>
+
+					</blockquote> 
+				</div>
+
+				<div class="row"> 
+					<h5 class="black-text" style="font-weight: 300">TRANSACTION ID - <span style="font-weight: 500;" class="orange-text accent-3"><?=$reservation[0]->reservation_key?></span> </h5>
+				</div>
+
+				<?php 
+				$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay";
+				$time_in = $reservation[0]->reservation_day_type == 1 ? "8:00 AM": "6:00 PM";
+				$time_out = $reservation[0]->reservation_day_type == 1 ? "5:00 PM": "5:00 AM";
+
+				// Compute length of stay
+				$datetime1 = new DateTime(date('Y-m-d',$reservation[0]->reservation_in)); 
+				$datetime2 = new DateTime(date('Y-m-d',$reservation[0]->reservation_out));
+				$difference = $datetime1->diff($datetime2);
+
+
+				?>
+
+				<div class="row" id="paymentDiv">  
+					<div class="card light-blue darken-4"> 
+						<form enctype="multipart/form-data" accept-charset="utf-8" name="fileUpload" id="fileUpload"  method="post">
+							<div class="card-content white-text">
+								<div class="row"> 
+									<div class="col s12">
+										<div class="col s7">
+											<h5 class="yellow-text text-lighten-5 flow-text center">SUMMARY</h5>
+											<div class="divider"></div> 
+											<br>  
+
+											<div class="row">
+												<div class="input-field col s6">
+													<i class="material-icons prefix">event</i>
+
+													<input disabled value="<?=date('M d, Y', $reservation[0]->reservation_in)?> - <?=$time_in?>" id="checkin" type="text" class="checkin validate white-text">
+													<label for="checkin"><span class="white-text">Check In</span></label>
+												</div>
+												<div class="input-field col s6">
+													<i class="material-icons prefix">event</i>
+													<input disabled value="<?=date('M d, Y', $reservation[0]->reservation_out)?> - <?=$time_out?>" id="checkout" type="text" class="checkout validate white-text">
+													<label for="checkout"><span class="white-text">Check out</span></label>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="input-field col s6">
+													<i class="material-icons prefix">hourglass_empty</i>
+													<input disabled value="<?=$difference->d+1?> Day/s" id="lengthStay" type="text" class="validate white-text lengthStay">
+													<label for="lengthStay"><span class="white-text">Length of Stay</span></label>
+												</div>
+												<div class="input-field col s6">
+													<i class="material-icons prefix">brightness_4</i>
+													<input disabled value="<?=$stay_type?>" id="roomCount" type="text" class="validate white-text roomCount">
+													<label for="roomCount"><span class="white-text">Stay Type</span></label>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="input-field col s6">
+													<i class="material-icons prefix">face</i>
+													<input disabled value="<?=$reservation[0]->reservation_adult?> Adult/s" id="lengthStay" type="text" class="validate white-text lengthStay">
+													<label for="lengthStay"><span class="white-text">Adult Count</span></label>
+												</div>
+												<div class="input-field col s6">
+													<i class="material-icons prefix">child_care</i>
+													<input disabled value="<?=$reservation[0]->reservation_child?> Child/ren" id="roomCount" type="text" class="validate white-text roomCount">
+													<label for="roomCount"><span class="white-text">Child Count</span></label>
+												</div>
+											</div>
+											<?php foreach ($reservation as $key => $value): ?>
+												<?php 
+												$room_type = $this->Crud->fetch('room_type',array("room_type_id"=>$value->room_type_id));
+												$room_type = $room_type[0];
+												?>
+												<div class="row">
+													<div class="input-field col s4">
+														<i class="material-icons prefix">hotel</i>
+														<input id="icon_prefix" disabled value="<?=$room_type->room_type_name?>" type="text" class=" white-text validate">
+														<label for="icon_prefix" class="white-text">Room Type</label>
+													</div>
+
+													<div class="input-field col s4">
+														<i class="material-icons prefix">border_clear</i>
+														<input id="icon_prefix" disabled value="<?=$reservation[0]->reservation_roomCount?> Bedroom" type="text" class=" white-text validate">
+														<label for="icon_prefix" class="white-text">Room Count</label>
+													</div>
+
+													<div class="input-field col s4">
+														<i class="material-icons prefix">monetization_on</i>
+														<input id="icon_prefix" disabled value="P<?=number_format($room_type->room_type_price)?>" type="text" class=" white-text validate">
+														<label for="icon_prefix" class="white-text">Room Price</label>
+													</div>
+												</div>
+											<?php endforeach ?>
+
+											<div class="divider"></div>
+											<?php 
+											$billing = $this->Crud->getSum('billing','billing_price' ,array('reservation_key'=>$reservation[0]->reservation_key)); 
+											$billing = $billing[0];
+											?>
+											<div class="row"> 
+												<div class="row right"  style="margin-right: 3%;">
+													<h5>TOTAL : <span class="orange-text accent-2" id="totalPrice">P<?=number_format($billing->billing_price)?></span></h5>
+													<h6>DP: <span class="orange-text accent-2" id="dpPrice">P500</span></h6>
+												</div>
+											</div>
+
+											<?php if ($reservation[0]->reservation_payment_status == 0): ?>
+												<div class="row">
+
+													<div class="file-field input-field" id="bankSlip">
+														<div class="btn">
+															<span>Upload bank slip</span>
+															<input name="fileInput" id="fileInput" type="file" required>
+														</div>
+														<div class="file-path-wrapper">
+															<input class="file-path white-text validate" type="text">
+														</div>
+													</div>
+													<div class="row" id="imageContainerDiv">
+														<img class="materialboxed" id="imageContainer" src="" style="width: 100%;" alt="">
+													</div>
+												</div>
+											<?php endif ?>
+										</div>
+										<div class="col s5">
+											<h5 id="attention" class="yellow-text text-lighten-5 flow-text center animated infinite tada">ATTENTION</h5>
+											<div class="divider"></div> 
+											<br>
+											<p>1. All reservations payment must be settle their payment within <span class="orange-text accent-2">24 hours</span>, hence it will EXPIRE.</p>
+											<br>
+											<p>2. Once payment has been settled, it <u class="orange-text accent-2"><i>cannot</i></u> be changed anymore</p>
+											<br>
+											<p>3. <span class="orange-text accent-2">Bank details </span> for the payments thru <span class="orange-text accent-2">	bank deposit</span> are provided <u class="orange-text accent-2"><i>here</i></u></p>
+											<br>
+											<h5 class="yellow-text text-lighten-5 flow-text center">BANK DETAILS</h5>
+											<div class="divider"></div> 
+											<br>
+
+											<span class="valign-wrapper"><i class="material-icons circle orange accent-3 grey-text text-darken-3" style="margin-right: 2%; padding: 1%;">assignment_ind</i> Account Name: Virginia and Boy</span>
+											<br>
+											<span class="valign-wrapper"><i class="material-icons circle orange accent-3 grey-text text-darken-3" style="margin-right: 2%; padding: 1%;">payment</i> Account Number: 07261954</span>
+											<br>
+
+											<h5 class="yellow-text text-lighten-5 flow-text center">CONTACTS</h5>
+											<div class="divider"></div> 
+											<br>	
+											<p><i>Have further questions? Reach us thru the ff:</i></p>
+											<br>
+											<span class="valign-wrapper"><i class="material-icons circle orange accent-3 grey-text text-darken-3" style="margin-right: 2%; padding: 1%;">call</i> 6669591 / 9852943 / 5708584</span>
+											<br>
+											<span class="valign-wrapper"><i class="material-icons circle orange accent-3 grey-text text-darken-3" style="margin-right: 2%; padding: 1%;">call</i> 0908-740-4449</span>
+											<br>
+											<span class="valign-wrapper"><i class="material-icons circle orange accent-3 grey-text text-darken-3" style="margin-right: 2%; padding: 1%;">email</i>Virginia&Boy@gmail.com</span>
+										</div>
+									</div>
+								</div>
+								<div class="divider"></div>
+								<br>
+								<?php if ($reservation[0]->reservation_payment_status == 0): ?>
+									<button type="submit" class="btn right white-text btnUpdatePayment" data-id="<?=$reservation[0]->reservation_key?>">SUBMIT PAYMENT</button> 
+								<?php endif ?>
+								<br><br>
+							</div> 
+						</form>
+					</div>
+				</div> 
+			</div> 
+		</div>
+
+		<?php else: ?>
+			<div class="container" style="padding-top: 5%;">
+				<center>
+					<img src="<?=base_url()?>assets/images/error-404.svg"  style="width: 20%;" alt="">
+					<h1 class="center"> NO RESERVATION FOUND</h1>	
+					<a href="<?=base_url()?>" class="waves-effect waves-light btn">RETURN HOME</a>
+				</center>
+			</div>
+
+		<?php endif ?>
+	</div>
