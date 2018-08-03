@@ -169,7 +169,7 @@ $(document).ready(function() {
 			dbRoomFee = ((dbRoomCount - def_dbRoomCount)*2000)*stayLength;
 			listItem.push({
 				['title']: 'Increased Double Bedroom count'+
-				'<p class="blue-text" style="font-size: 0.8rem">('+(sbRoomCount - def_sbRoomCount)+' Double Bedroom x P'+2000+' Room Fee x '+stayLength+' Day/s)',
+				'<p class="blue-text" style="font-size: 0.8rem">('+(dbRoomCount - def_dbRoomCount)+' Double Bedroom x P'+2000+' Room Fee x '+stayLength+' Day/s)',
 				['qty']: dbRoomCount - def_dbRoomCount,
 				['total']: dbRoomFee
 			});  
@@ -178,7 +178,7 @@ $(document).ready(function() {
 
 			listItem.push({
 				['title']: 'Decreased Single Bedroom count'+
-				'<p class="blue-text" style="font-size: 0.8rem">('+(sbRoomCount - def_sbRoomCount)+' Double Bedroom x P'+2000+' Room Fee x '+stayLength+' Day/s)',
+				'<p class="blue-text" style="font-size: 0.8rem">('+(dbRoomCount - def_dbRoomCount)+' Double Bedroom x P'+2000+' Room Fee x '+stayLength+' Day/s)',
 				['qty']: dbRoomCount - def_dbRoomCount,
 				['total']: dbRoomFee
 			});  	

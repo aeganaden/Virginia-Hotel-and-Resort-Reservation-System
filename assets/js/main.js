@@ -242,6 +242,7 @@ $('.proceed').on('click', function() {
 =======================================*/ 
 
 $(".roomQty").on('change', function(event) { 
+  totalRoomPrice = 0;
   let htmlDiv = ""; 
   let hasItem = false; 
     // GET VALUE OF EACH SELECT AND ADD TO LIST
@@ -250,25 +251,27 @@ $(".roomQty").on('change', function(event) {
      let roomId =  $(this).attr('data-id');
      let roomPrice = parseInt($(this).attr('data-price'));
      let qty = parseInt($(this).val()); 
-   // COMPUTATION
-   totalRoomPrice += roomPrice * qty; 
 
 
-   // CREATING LIST OF SELECTED ROOMS
-   if (qty > 0) { 
-    hasItem = true;
-    let roomName = $("#roomName"+roomId).text();
-    htmlDiv += '<div class="col-md-6">'+'<h6>'+roomName+'</h6>'+'</div>'+
-    '<div class="col-md-3">'+'<h6>'+qty+'</h6>'+'</div>'+
-    '<div class="col-md-3">'+'<h6>'+(roomPrice * qty)+'</h6>'+'</div>'; 
-    $(".viewItemsDiv").html(htmlDiv); 
-  }
-});  
+     // COMPUTATION
+     totalRoomPrice += roomPrice * qty;  
+
+     // CREATING LIST OF SELECTED ROOMS
+     if (qty > 0) { 
+       hasItem = true;
+       let roomName = $("#roomName"+roomId).text();
+       htmlDiv += '<div class="col-md-6">'+'<h6>'+roomName+'</h6>'+'</div>'+
+       '<div class="col-md-3">'+'<h6>'+qty+'</h6>'+'</div>'+
+       '<div class="col-md-3">'+'<h6>'+(roomPrice * qty)+'</h6>'+'</div>'; 
+       $(".viewItemsDiv").html(htmlDiv); 
+     }
+   });   
+    console.log(hasItem)
 
     if (hasItem == false) {
 
       htmlDiv = '<div class="container"><h6 class="text-muted">Select a room to start booking</h6></div>';
-      $("#viewItemsDiv").html(htmlDiv); 
+      $(".viewItemsDiv").html(htmlDiv); 
 
     }
 
@@ -335,13 +338,11 @@ $(".btnProceed").click(function(event) {
 
 
            //  INSERT THE CONTENT 
-           if (qty > 0) {  
-            let roomName = $("#roomName"+roomId).text();
-            htmlDivPax += '<h6 class="p-2 text-muted">'+roomName+' -  <span class="text-primary">'+roomPax+' PAX</span> </h6>'; 
+           if (qty > 0) {   
             totalPax+= roomPax;
           }
         });  
-          htmlDivPax += ' || <h6 class="p-2 text-muted">MAXIMUM PAX :  <span class="text-primary">'+totalPax+' PAX</span> </h6>'; 
+          htmlDivPax += ' <h6 class="p-2 text-muted">MAXIMUM PAX :  <span class="text-primary">'+totalPax+' PAX</span> </h6>'; 
           $(".paxInfoDiv").html(htmlDivPax); 
 
 
@@ -437,17 +438,19 @@ $(".btnProceed").click(function(event) {
 
       // CALCULATE TOTAL TAX 
       let userPax = parseInt(inputAdult) + parseInt(inputChild); 
-      let tax = $(".taxCosts").text(); 
-      tax = tax / 100;
+      let tax = parseInt($(".taxCosts").text()); 
+      tax = (tax / 100)+1;
 
       if (totalPax < userPax) { 
         feeCosts = 500;
         $(".feeCosts").append("<p>Add. Pax. - P"+feeCosts.toLocaleString()+"</p>");
-      }else{
+      } 
 
-      }
-      let totalTax = ((totalRoomPrice + feeCosts + entrance_fee)*diff) * tax;
-      totalCharge = ((totalRoomPrice + feeCosts + entrance_fee)*diff) + totalTax;
+      let totalFee = (totalRoomPrice + feeCosts + entrance_fee)*diff; 
+      
+      totalCharge = Math.round(totalFee * tax);
+      let totalTax = ((totalCharge / tax) - totalCharge)*(-1);
+
       $(".taxFee").text('P'+totalTax.toLocaleString('en'));
 
       $(".totalCharge").text('P'+totalCharge.toLocaleString('en'));

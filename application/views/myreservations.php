@@ -97,17 +97,20 @@
 							$time_in = $reservation[0]->reservation_day_type == 1 ? "8:00 AM": "6:00 PM";
 							$time_out = $reservation[0]->reservation_day_type == 1 ? "5:00 PM": "5:00 AM";
 							?>
-							<div class="card orange accent-3" id="reservationDetails" >
+							<div class="card orange accent-3" id="reservationDetails"  style="display: none">
 								<div class="card-content white-text">
 
 									<!--=============================================
 									=            VIEWING RESERVATION DIV            =
 									==============================================-->
-									
+
+
 									<div class="row"> 
 										<span class="card-title black-text center">
 											<!-- style="display: none;" -->
-											<i class="material-icons right circle white hoverable btnEditReservation" style="padding: 0.9% 1.5%; cursor: pointer;">mode_edit</i>
+											<?php if ($reservation[0]->reservation_payment_status == 0): ?>
+												<i class="material-icons right circle white hoverable btnEditReservation" style="padding: 0.9% 1.5%; cursor: pointer;">mode_edit</i>
+											<?php endif ?>
 											Reservation Details
 										</span>
 										<div class="divider black"></div> 

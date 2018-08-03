@@ -129,17 +129,20 @@
 											<?php if ($reservation[0]->reservation_payment_status == 0): ?>
 												<div class="row">
 
-													<div class="file-field input-field" id="bankSlip">
-														<div class="btn">
-															<span>Upload bank slip</span>
-															<input name="fileInput" id="fileInput" type="file" required>
-														</div>
-														<div class="file-path-wrapper">
-															<input class="file-path white-text validate" type="text">
+													<div class="col s8">
+														<div class="file-field input-field" id="bankSlip">
+															<div class="btn">
+																<span>Upload bank slip</span>
+																<input name="fileInput" id="fileInput" type="file" required>
+															</div>
+															<div class="file-path-wrapper">
+																<input class="file-path white-text validate" type="text">
+															</div>
 														</div>
 													</div>
-													<div class="row" id="imageContainerDiv">
-														<img class="materialboxed" id="imageContainer" src="" style="width: 100%;" alt="">
+													<div class="col s4" id="imageContainerDiv"> 
+														<img class="responsive-img materialboxed " id="imageContainer" src="" alt="">
+
 													</div>
 												</div>
 											<?php endif ?>
