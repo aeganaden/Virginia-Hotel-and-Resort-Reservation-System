@@ -20,6 +20,7 @@
 						<blockquote class="color-o-ac3"> 
 							<h4 class="black-text" style="font-weight: 300">
 								RESERVATION <?= $reservation[0]->reservation_status == 1 ? "- <span class='green-text'>APPROVED</span>" : "";  ?>
+								<?= $reservation[0]->reservation_status == 4 ? "- <span class='red-text'>EXPIRED</span>" : "";  ?>
 								<?php if ($reservation[0]->reservation_status != 1): ?>
 									<a href="#!" class="btn right red btnDeleteReservation" data-id="<?=$reservation[0]->reservation_key?>"><i class="material-icons right">clear</i>cancel reservation</a>
 								<?php endif ?>
@@ -75,13 +76,13 @@
 											<?php if ($reservation[0]->reservation_payment_status == 0): ?>
 												<a href="#!" class="collection-item grey lighten-4 black-text">
 													<span class="new badge red accent-3" data-badge-caption=""><?=date('M d, Y - h:i A', strtotime('+1 day',$reservation[0]->reservation_reserved_at))?></span>
-													Will expire at:
+													<?=$reservation[0]->reservation_status == 4 ? "Expired at: ": "Will expire at: "?>
 												</a> 
 											<?php endif ?>
 										</div>
 
 									</div>
-									<?php if ($reservation[0]->reservation_payment_status == 0): ?>
+									<?php if ($reservation[0]->reservation_payment_status == 0 && $reservation[0]->reservation_status != 4): ?>
 										<div class="row">	
 											<a href="<?=base_url()?>Payments/index/<?=$reservation[0]->reservation_key?>" class="btn orange accent-3 black-text right waves-effect waves-light" id="btnProceedPayment"><i class="material-icons right">open_in_new</i>Proceed to payment</a>
 										</div>
@@ -108,7 +109,7 @@
 									<div class="row"> 
 										<span class="card-title black-text center">
 											<!-- style="display: none;" -->
-											<?php if ($reservation[0]->reservation_payment_status == 0): ?>
+											<?php if ($reservation[0]->reservation_payment_status == 0 && $reservation[0]->reservation_status != 4): ?>
 												<i class="material-icons right circle white hoverable btnEditReservation" style="padding: 0.9% 1.5%; cursor: pointer;">mode_edit</i>
 											<?php endif ?>
 											Reservation Details

@@ -162,7 +162,7 @@
 												</div>
 											</div>
 
-											<?php if ($reservation[0]->reservation_payment_status == 0): ?>
+											<?php if ($reservation[0]->reservation_payment_status == 0 && $reservation[0]->reservation_status != 4): ?>
 												<div class="row">
 
 													<div class="col s8">
@@ -217,7 +217,7 @@
 								</div>
 								<div class="divider"></div>
 								<br>
-								<?php if ($reservation[0]->reservation_payment_status == 0): ?>
+								<?php if ($reservation[0]->reservation_payment_status == 0 && $reservation[0]->reservation_status != 4): ?>
 									<button type="submit" class="btn right white-text btnUpdatePayment" data-id="<?=$reservation[0]->reservation_key?>">SUBMIT PAYMENT</button> 
 								<?php endif ?>
 								<br><br>

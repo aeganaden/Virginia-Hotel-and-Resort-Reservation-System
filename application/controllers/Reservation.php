@@ -13,6 +13,7 @@ class Reservation extends CI_Controller {
 
 	public function index()
 	{
+		$this->updateToExpired(); 
 		$dateFrom = $this->input->post('date-from');
 		$dateTo = $this->input->post('date-to');
 		$title = "Reservation - Virginia and Boy Lodge and Resort";
@@ -23,6 +24,27 @@ class Reservation extends CI_Controller {
 		$this->load->view('includes/header',compact('title','dateTo','dateFrom','roomType'));
 		$this->load->view('reservation/index'); 
 		$this->load->view('includes/footer');
+	}
+
+	public function updateToExpired()
+	{
+		$where = array(
+			'reservation_status' => 2,
+			'reservation_payment_status' => 0,
+		);
+		$reservations = $this->Crud->fetch('reservation',$where);
+		if ($reservations) {
+			foreach ($reservations as $key => $value) {
+				$reserved_at = $value->reservation_reserved_at;
+				$will_expire_at = date('mdyHis',strtotime('+1 day', $reserved_at));
+				$today = date('mdyHis',strtotime('now')); 
+				if ($will_expire_at <= $today) {
+					$update_data = array('reservation_status' => 4 );
+					$where = array('reservation_key' => $value->reservation_key );
+					$this->Crud->update('reservation',$update_data,$where);
+				}
+			} 
+		}
 	}
 
 	public function checkReservation()
