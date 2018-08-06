@@ -46,7 +46,7 @@ $(document).ready(function() {
 		if (atLeastOneIsChecked) {
 			if($(this).prop('checked')) {
 				$("#Room_1").removeAttr('disabled');
-				$("#Room_0").val(1); 
+				$("#Room_1").val(1); 
 			}else{
 				$("#Room_1").attr('disabled',true);
 				$("#Room_1").val(0);
@@ -55,6 +55,19 @@ $(document).ready(function() {
 			$(this).prop("checked",true);
 			M.toast({html: 'Cannot diselect, must select atleast one room type'})
 		}
+
+	});
+
+	$("#addMattress").change(function(event) {  
+
+		if($(this).prop('checked')) {
+			$("#mattressCount").removeAttr('disabled');
+			$("#mattressCount").val(1); 
+		}else{
+			$("#mattressCount").attr('disabled',true);
+			$("#mattressCount").val(0);
+		}
+
 
 	});
 
@@ -70,9 +83,11 @@ $(document).ready(function() {
 		let entranceFee = $(this).attr('data-entrance');
 		let stayType = $(this).attr('data-staytype');
 		let adultCount = parseInt($("#adultCount").val());
+		let mattressCount = parseInt($("#mattressCount").val());
 		let childCount =parseInt( $("#childCount").val());
 		let sbRoomCount = parseInt($("#Room_0").val());
 		let dbRoomCount = parseInt($("#Room_1").val());
+		let def_mattressCount = parseInt($("#mattressCount").attr('data-def'));
 		let def_adultCount = parseInt($("#adultCount").attr('data-def'));
 		let def_childCount = parseInt($("#childCount").attr('data-def'));
 		let def_sbRoomCount = parseInt($("#Room_0").attr('data-def'));
@@ -85,9 +100,10 @@ $(document).ready(function() {
 		let sbRoomFee = 0;
 		let dbRoomFee = 0;
 		let paxFee = 0;
-		let changesTotal = 0;
+		let changesTotal = 0; 
 
 		// SOME COMPUTATION FOR ADDITIONAL BILLS
+
 
 		// ADD/SUBTRACT BILLS FOR PAX CHANGES
 		let totalPax = pax_sbRoomCount + pax_dbRoomCount;
@@ -143,6 +159,25 @@ $(document).ready(function() {
 					['total']: entranceFeeTotal
 				});   
 			} 
+		}
+
+		// ADD MATTRESS
+		let totalMattressCount  = mattressCount - def_mattressCount; 
+		if (mattressCount > def_mattressCount) {  
+			listItem.push({
+				['title']: 'Add. Misc. Mattress',
+				['qty']: totalMattressCount,
+				['total']: (totalMattressCount) * 350
+			}); 
+			// mattressCount = mattressCount + def_mattressCount;
+		}else if(mattressCount < def_mattressCount){ 
+			// totalMattressCount = totalMattressCount;
+			listItem.push({
+				['title']: 'Sub. Misc. Mattress',
+				['qty']: totalMattressCount,
+				['total']: (totalMattressCount) * 350
+			}); 
+			// mattressCount = mattressCount *-1;
 		}
 
 		// ADD/SUBTRACT BILLS FOR ROOMS
@@ -264,6 +299,7 @@ $(document).ready(function() {
 						childCount,
 						sbRoomCount,
 						dbRoomCount,
+						mattressCount
 					},
 					success: function(data){
 						if (data == true) {

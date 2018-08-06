@@ -113,15 +113,51 @@
 													</div>
 												</div>
 											<?php endforeach ?>
-
-											<div class="divider"></div>
 											<?php 
-											$billing = $this->Crud->getSum('billing','billing_price' ,array('reservation_key'=>$reservation[0]->reservation_key)); 
-											$billing = $billing[0];
+											$billing = $this->Crud->fetch('billing' , array('reservation_key' => $reservation[0]->reservation_key ));
+											$billing_total = 0;
+											$billing_total_negative = 0;
+											foreach ($billing as $key => $value) {
+												$billing_total += ($value->billing_price * $value->billing_quantity);
+												if ($value->billing_price * $value->billing_quantity > 0) {
+												}else{
+													$billing_total_negative += ($value->billing_price * $value->billing_quantity) * -1 ;
+												}
+												// echo "$billing_total"."<br>";
+											} 
+											$billing_total = $billing_total +  $billing_total_negative;
+											$miscs = $this->Crud->fetch_like('billing','billing_name','Misc.', array('reservation_key' => $reservation[0]->reservation_key ));
 											?>
+
+											<div class="row">
+												<h5>Miscellaneous</h5>
+												<table>
+													<thead>
+														<tr>
+															<th>Misc. Name</th>
+															<th>Misc. Quantity</th>
+															<th>Misc. Price</th>
+															<th>Total</th>
+														</tr>
+													</thead>
+
+													<tbody>
+														<?php foreach ($miscs as $key => $value): ?>
+															<tr>
+																<td><?=$value->billing_name?></td>
+																<td><?=$value->billing_quantity?></td>
+																<td><?=$value->billing_price?></td>
+																<td><?=($value->billing_quantity * $value->billing_price)?></td>
+															</tr> 
+														<?php endforeach ?>
+													</tbody>
+												</table>
+											</div>
+											<div class="divider"></div>
+
 											<div class="row"> 
 												<div class="row right"  style="margin-right: 3%;">
-													<h5>TOTAL : <span class="orange-text accent-2" id="totalPrice">P<?=number_format($billing->billing_price)?></span></h5>
+													<h5>TOTAL : <span class="orange-text accent-2" id="totalPrice">P<?=number_format($billing_total)?></span></h5>
 													<h6>DP: <span class="orange-text accent-2" id="dpPrice">P500</span></h6>
 												</div>
 											</div>

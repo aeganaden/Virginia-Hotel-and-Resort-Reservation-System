@@ -58,7 +58,9 @@ class Payments extends CI_Controller {
 
 	public function updateBills()
 	{
-		$post = $this->input->post(array('changesTotal','reservation_key','adultCount','childCount','sbRoomCount','dbRoomCount'));
+		$post = $this->input->post(array('changesTotal','reservation_key','adultCount','childCount','sbRoomCount','dbRoomCount','mattressCount'));
+
+
 		$resSbUpdateData = array(
 			'reservation_adult' => $post['adultCount'],
 			'reservation_child' => $post['childCount'],
@@ -77,23 +79,72 @@ class Payments extends CI_Controller {
 			'billing_quantity'=>1,
 			'reservation_key'=>$post['reservation_key'],
 		);
+		$billingMattressData = array(
+			'billing_price'=>350,
+			'billing_name'=>"Misc. Mattress ",
+			'billing_quantity'=>$post['mattressCount'],
+			'reservation_key'=>$post['reservation_key'],
+		);
+		$billingMattressUpdateData = array(
+			'billing_quantity'=>$post['mattressCount'],
+		);
 		$where_sb = array('reservation_key'=>$post['reservation_key'], 'room_type_id'=>1);
 		$where_db = array('reservation_key'=>$post['reservation_key'], 'room_type_id'=>2);
 
-
-		if ($this->Crud->update('reservation',$resSbUpdateData,$where_sb)) {
-			if ($this->Crud->update('reservation',$resDbUpdateData,$where_db)) {
-				if ($this->Crud->insert('billing',$billingData)) {
-					echo json_encode(true);
-				}else{
-					echo json_encode("Error inserting to billing");
-				}
-			}else{ 
-				echo json_encode("Error updating double bedroom");
+		if (!$this->Crud->update('reservation',$resSbUpdateData,$where_sb)) {
+			echo json_encode("Error updating single bedroom"); 
+		} 
+		if (!$this->Crud->update('reservation',$resDbUpdateData,$where_db)) {
+			echo json_encode("Error updating double bedroom");
+		} 
+		if ($mattress = $this->Crud->fetch_like('billing','billing_name','Misc. Mattress', array('reservation_key' => $post['reservation_key'] ))) {
+			if (!$this->Crud->update('billing',$billingMattressUpdateData, array('billing_id' => $mattress[0]->billing_id ))) {
+				echo "<pre>";
+				var_dump($billingMattressUpdateData);
+				echo json_encode("Error updating mattress billing");
 			}
 		}else{
-			echo json_encode("Error updating single bedroom");
+			if (!$this->Crud->insert('billing',$billingMattressData)) {
+				echo json_encode("Error inserting mattress to billing");
+			}
 		}
+
+		if ($post['changesTotal'] > 0) {
+			if ($this->Crud->insert('billing',$billingData)) {
+				echo json_encode(true);
+			}else{
+				echo json_encode("Error inserting to billing");
+			}
+		}else{
+			echo json_encode(true);
+		} 
+
+		// if ($this->Crud->update('reservation',$resSbUpdateData,$where_sb)) {
+		// 	if ($this->Crud->update('reservation',$resDbUpdateData,$where_db)) {
+		// 		if ($this->Crud->insert('billing',$billingMattressData)) {
+		// 			if ($post['changesTotal'] > 0) {
+		// 				if ($this->Crud->insert('billing',$billingData)) {
+		// 					echo json_encode(true);
+		// 				}else{
+		// 					echo json_encode("Error inserting to billing");
+		// 				}
+		// 			}else{
+		// 				echo json_encode(true);
+		// 			}
+		// 		}else{
+		// 			echo json_encode("Error inserting to billing");
+		// 		}
+		// 	}else{ 
+		// 		echo json_encode("Error updating double bedroom");
+		// 	}
+		// }else{
+		// 	echo json_encode("Error updating single bedroom");
+		// }
+
+
+
+
+
 	}
 	
 

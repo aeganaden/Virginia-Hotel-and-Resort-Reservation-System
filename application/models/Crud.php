@@ -11,6 +11,17 @@ class Crud extends CI_Model {
 		return ( $query->num_rows() > 0) ? $query->result() : FALSE;
 	}
 
+
+	public function fetch_like($table,$column,$pattern, $where = NULL) {
+		if (!empty($where)) {
+			$this->db->where($where);
+		}
+		$this->db->like($column, $pattern);
+		$query = $this->db->get($table);
+		return ( $query->num_rows() > 0) ? $query->result() : FALSE;
+	}
+
+
 	public function fetch_or($table, $where = NULL, $orwhere = NULL) {
 		if (!empty($where)) {
 			$this->db->where($where);

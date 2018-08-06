@@ -241,6 +241,26 @@
 
 											</div>
 										<?php endforeach ?> 
+										<!-- Misc. Mattress -->
+										<?php 
+										$miscs = $this->Crud->fetch_like('billing','billing_name','Misc. Mattress', array('reservation_key' => $reservation[0]->reservation_key ));
+										$totalMattress = $miscs[0]->billing_quantity; 
+										?>
+										<div class="row">
+											<div class="input-field col s1">
+												<p>
+													<label>
+														<input type="checkbox" <?=$totalMattress != 0 ? "checked":""?> id="addMattress" /> 
+														<span></span>
+													</label>
+												</p>
+											</div>
+											<div class="input-field col s11">
+												<i class="material-icons prefix black-text">view_compact</i>
+												<input id="mattressCount" value="<?=$totalMattress?>" <?=$totalMattress != 0 ? "":"disabled"?> data-def="<?=$totalMattress?>" min="1" max="100" type="number" class="validate">
+												<label for="mattressCount">Additonal Mattress Count</label>
+											</div>
+										</div>
 										<a class="waves-effect waves-light blue darken-3 btn right btnConfirmReservation"  data-days="<?=($difference->d+1)?>" data-staytype = "$reservation[0]->reservation_day_type" data-entrance ="<?=$entranceFee?>" data-id="<?=$reservation[0]->reservation_key?>"><i class="material-icons right">cloud_upload</i>UPDATE RESERVATION</a>
 
 									</div>

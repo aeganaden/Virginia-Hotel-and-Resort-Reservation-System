@@ -448,8 +448,9 @@ $(".btnProceed").click(function(event) {
 
       let totalFee = (totalRoomPrice + feeCosts + entrance_fee)*diff; 
       
-      totalCharge = Math.round(totalFee * tax);
-      let totalTax = ((totalCharge / tax) - totalCharge)*(-1);
+      let totalTax = ((totalFee / tax) - totalFee)*(-1);
+      
+      totalCharge = totalFee;
 
       $(".taxFee").text('P'+totalTax.toLocaleString('en'));
 

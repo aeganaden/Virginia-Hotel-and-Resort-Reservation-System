@@ -142,6 +142,7 @@ class Reservation extends CI_Controller {
 	public function deleteReservation()
 	{
 		$reservation_key = $this->input->post('reservation_key');
+		
 		if ($this->Crud->delete('reservation',array('reservation_key'=>$reservation_key))) {
 			if ($this->Crud->delete('billing',array('reservation_key'=>$reservation_key))) {
 				echo json_encode(true);
