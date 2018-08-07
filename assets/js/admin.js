@@ -20,8 +20,52 @@ $(document).ready(function() {
 				confirm_password, 
 			},
 			success:function (data) {
-				console.log(data);
+				if(data == true){ 
+					swal({
+						title: 'Moderator has been added!',
+						text: 'Moderator has been added and has a default status of active',
+						icon: 'success',
+						closeOnClickOutside: false,
+					}).then(()=>{
+						location.reload();
+					})
+				}else{ 
+					var size = Object.keys(data.error).length; 
+					Object.entries(data.error).forEach(([key, val]) => {    
+						M.toast({html: val})       
+					});
+				}
 			}
 		});      
 	});
-});
+
+	   // oncheck moderator status
+	   $(".chk_moder_status").change(function (event) {
+	   	var value = $(this).prop("checked") ? 1 : 0;
+	   	var str_val = $(this).prop("checked") ? "ACTIVE" : "INACTIVE";
+	   	var id = $(this).data('id');
+
+	   	$.ajax({
+	   		url: base_url+'Admin/updateStatus',
+	   		type: 'post',
+	   		dataType: 'json',
+	   		data: {
+	   			id,
+	   			value
+	   		},
+	   		success: function (data) {
+	   			$(".stat" + id).html(str_val);
+	   			if (value == 0) {
+	   				$(".stat" + id).removeClass('green-text');
+	   				$(".stat" + id).addClass('red-text');
+	   			} else {
+	   				$(".stat" + id).removeClass('red-text');
+	   				$(".stat" + id).addClass('green-text');
+	   			}
+
+	   			M.toast({html: '<span>Moderator Status Updated</span>'})       
+
+	   		}
+	   	});
+	   });
+	});

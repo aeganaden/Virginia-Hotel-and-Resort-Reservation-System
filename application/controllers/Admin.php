@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Manila');
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin extends CI_Controller {
@@ -52,20 +53,41 @@ class Admin extends CI_Controller {
 
 	public function addModerator()
 	{
-		$this->form_validation->set_rules('first_name', 'First Name', 'required');
-		$this->form_validation->set_rules('last_name', 'Last Name', 'required'); 
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('password', 'Password', 'required');
-		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required');
+		$this->form_validation->set_rules('first_name', 'First Name', 'required|alpha');
+		$this->form_validation->set_rules('last_name', 'Last Name', 'required|alpha'); 
+		$this->form_validation->set_rules('username', 'Username', 'required|min_length[6]|alpha');
+		$this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
+		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
 
 
 		if ($this->form_validation->run() == FALSE){
 			$errors = validation_errors();
-			echo json_encode(['error'=>$errors]);
+			echo json_encode(['error'=>$this->form_validation->error_array()]);
 		}else{
-			echo json_encode(['success'=>'Record added successfully.']);
+			$insertData = array(
+				'moderator_username' => $this->input->post('username'), 
+				'moderator_firstname' => $this->input->post('first_name'), 
+				'moderator_lastname' => $this->input->post('last_name'), 
+				'moderator_password' => sha1($this->input->post('password')), 
+				'moderator_status' => 1, 
+				'moderator_created_at' => strtotime('now'), 
+			);
+			if ($this->Crud->insert('moderator',$insertData)) {
+				echo json_encode(true);
+			}else{
+				echo json_encode("Error Inserting Data");
+			}
 		}
 
+	}
+
+	public function updateStatus()
+	{
+		$id = $this->input->post("id");
+		$val = $this->input->post("value");
+		if ($this->Crud->update("moderator", array("moderator_status" => $val), array("moderator_id" => $id))) {
+			echo json_encode("true");
+		}
 	}
 
 	public function logout()
