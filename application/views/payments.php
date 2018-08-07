@@ -129,30 +129,32 @@
 											$miscs = $this->Crud->fetch_like('billing','billing_name','Misc.', array('reservation_key' => $reservation[0]->reservation_key ));
 											?>
 
-											<div class="row">
-												<h5>Miscellaneous</h5>
-												<table>
-													<thead>
-														<tr>
-															<th>Misc. Name</th>
-															<th>Misc. Quantity</th>
-															<th>Misc. Price</th>
-															<th>Total</th>
-														</tr>
-													</thead>
-
-													<tbody>
-														<?php foreach ($miscs as $key => $value): ?>
+											<?php if ($miscs): ?>
+												<div class="row">
+													<h5>Miscellaneous</h5>
+													<table>
+														<thead>
 															<tr>
-																<td><?=$value->billing_name?></td>
-																<td><?=$value->billing_quantity?></td>
-																<td><?=$value->billing_price?></td>
-																<td><?=($value->billing_quantity * $value->billing_price)?></td>
-															</tr> 
-														<?php endforeach ?>
-													</tbody>
-												</table>
-											</div>
+																<th>Misc. Name</th>
+																<th>Misc. Quantity</th>
+																<th>Misc. Price</th>
+																<th>Total</th>
+															</tr>
+														</thead>
+
+														<tbody>
+															<?php foreach ($miscs as $key => $value): ?>
+																<tr>
+																	<td><?=$value->billing_name?></td>
+																	<td><?=$value->billing_quantity?></td>
+																	<td><?=$value->billing_price?></td>
+																	<td><?=($value->billing_quantity * $value->billing_price)?></td>
+																</tr> 
+															<?php endforeach ?>
+														</tbody>
+													</table>
+												</div>
+											<?php endif ?>
 											<div class="divider"></div>
 
 											<div class="row"> 
@@ -219,6 +221,9 @@
 								<br>
 								<?php if ($reservation[0]->reservation_payment_status == 0 && $reservation[0]->reservation_status != 4): ?>
 									<button type="submit" class="btn right white-text btnUpdatePayment" data-id="<?=$reservation[0]->reservation_key?>">SUBMIT PAYMENT</button> 
+								<?php endif ?>
+								<?php if ($reservation[0]->reservation_payment_status == 1): ?>
+									<button type="submit" class="btn right orange accent-3 black-text btnPrintReceipt" data-id="<?=$reservation[0]->reservation_key?>"><i class="material-icons right">print</i>PRINT RECEIPT</button> 
 								<?php endif ?>
 								<br><br>
 							</div> 

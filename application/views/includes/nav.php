@@ -38,6 +38,9 @@
 			<li class="nav-item ">
 				<a class="nav-link text-light" href="<?=base_url()?>Welcome/contactUs">Contact Us</a>
 			</li>
+			<li class="nav-item" style="border-left: 3px solid white;"> 
+				<a href="<?=base_url()?>Admin"><i class="material-icons" style="padding-top: 40%; cursor: pointer; padding-left: 50%; color: white">input</i></a>
+			</li>
 		</ul>
 	</div>
 </nav>
