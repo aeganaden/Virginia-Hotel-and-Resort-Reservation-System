@@ -221,7 +221,7 @@
 									<button type="submit" class="btn right white-text btnUpdatePayment" data-id="<?=$reservation[0]->reservation_key?>">SUBMIT PAYMENT</button> 
 								<?php endif ?>
 								<?php if ($reservation[0]->reservation_payment_status == 1): ?>
-									<button type="submit" class="btn right orange accent-3 black-text btnPrintReceipt" data-id="<?=$reservation[0]->reservation_key?>"><i class="material-icons right">print</i>PRINT RECEIPT</button> 
+									<button type="button" class="btn right orange accent-3 waves-effect waves-light black-text btnPrintReceipt" data-id="<?=$reservation[0]->reservation_key?>"><i class="material-icons right">print</i>PRINT RECEIPT</button> 
 								<?php endif ?>
 								<br><br>
 							</div> 

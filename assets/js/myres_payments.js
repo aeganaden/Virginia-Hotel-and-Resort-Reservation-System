@@ -19,6 +19,10 @@ $(document).ready(function() {
 		evt.preventDefault();
 	});
 	
+	
+	$(".btnPrintReceipt").click(function(event) {
+		alert();
+	});
 
 
 	$("#chkRoom_0").change(function(event) {
