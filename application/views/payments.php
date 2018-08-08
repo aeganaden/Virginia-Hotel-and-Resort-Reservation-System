@@ -26,9 +26,7 @@
 				</div>
 
 				<?php 
-				$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay";
-				$time_in = $reservation[0]->reservation_day_type == 1 ? "8:00 AM": "6:00 PM";
-				$time_out = $reservation[0]->reservation_day_type == 1 ? "5:00 PM": "5:00 AM";
+				$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay"; 
 
 				// Compute length of stay
 				$datetime1 = new DateTime(date('Y-m-d',$reservation[0]->reservation_in)); 
@@ -53,12 +51,12 @@
 												<div class="input-field col s6">
 													<i class="material-icons prefix">event</i>
 
-													<input disabled value="<?=date('M d, Y', $reservation[0]->reservation_in)?> - <?=$time_in?>" id="checkin" type="text" class="checkin validate white-text">
+													<input disabled value="<?=date('M d, Y - h:i A', $reservation[0]->reservation_in)?>" id="checkin" type="text" class="checkin validate white-text">
 													<label for="checkin"><span class="white-text">Check In</span></label>
 												</div>
 												<div class="input-field col s6">
 													<i class="material-icons prefix">event</i>
-													<input disabled value="<?=date('M d, Y', $reservation[0]->reservation_out)?> - <?=$time_out?>" id="checkout" type="text" class="checkout validate white-text">
+													<input disabled value="<?=date('M d, Y - h:i A', $reservation[0]->reservation_out)?>" id="checkout" type="text" class="checkout validate white-text">
 													<label for="checkout"><span class="white-text">Check out</span></label>
 												</div>
 											</div>

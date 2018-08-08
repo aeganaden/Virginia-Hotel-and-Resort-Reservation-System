@@ -1,10 +1,10 @@
-<form action="<?=base_url()?>Admin/checkCredentials" method="post">
+<form action="<?=base_url()?>Moderator/checkCredentials" method="post">
 	<div class="row valign-wrapper">
 		<div class="col s4"></div>
 		<div class="col s4"> 
 			<div class="card teal lighten-5" style="margin-top: 40%;">
 				<div class="card-content grey-text text-darken-4">
-					<span class="card-title center">ADMIN LOGIN</span>
+					<span class="card-title center">MODERATOR LOGIN</span>
 					<div class="divider black">	</div>
 					<div class="row">
 						<div class="col s1"></div>
@@ -27,7 +27,7 @@
 								<label for="password">Password</label>
 							</div>
 							<center>
-								<i>Are you a moderator? <a href="<?=base_url()?>Moderator">Login here</a></i>
+								<i>Are you an admin? <a href="<?=base_url()?>Admin">Login here</a></i>
 							</center>
 						</div>
 						<div class="col s1"></div>

@@ -16,6 +16,7 @@ class Admin extends CI_Controller {
 	public function index()
 	{
 		$userData = $this->session->userdata('userdata');
+		
 		if (!$userData) {
 			$title = "Admin - Login";
 			$this->load->view('includes/materialize/header',compact('title'));
@@ -23,6 +24,22 @@ class Admin extends CI_Controller {
 			$this->load->view('includes/materialize/footer');
 		}else{
 			$title = "Admin - Home";
+			$this->load->view('includes/materialize/header',compact('title'));
+			$this->load->view('admin/reports'); 
+			$this->load->view('includes/materialize/footer');
+		}
+	}
+
+	public function moderators()
+	{
+		$userData = $this->session->userdata('userdata');
+		if (!$userData) {
+			$title = "Admin - Login";
+			$this->load->view('includes/materialize/header',compact('title'));
+			$this->load->view('admin/login'); 
+			$this->load->view('includes/materialize/footer');
+		}else{
+			$title = "Admin - Reports";
 			$this->load->view('includes/materialize/header',compact('title'));
 			$this->load->view('admin/admin'); 
 			$this->load->view('includes/materialize/footer');

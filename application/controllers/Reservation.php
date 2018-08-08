@@ -77,18 +77,19 @@ class Reservation extends CI_Controller {
 			'guest_phone'=>$i['phone'],
 			'guest_address'=>$i['address'],
 			'guest_email'=>$i['email'],
-		);
-
+		); 
 		if ($this->Crud->insert('guest',$data_guest)) {
 			$last_id = $this->db->insert_id();
 			$transaction_key = strtoupper(uniqid());
+			$time_in = $i['stayTypeChk'] == 1 ? " 8:00 AM": " 6:00 PM";
+			$time_out = $i['stayTypeChk'] == 1 ? " 5:00 PM": " 5:00 AM";
 
 			for ($j=0; $j < 2; $j++) { 
 				$data_reservation = array(
-					'reservation_in'=>strtotime($i['checkin']),
+					'reservation_in'=>strtotime($i['checkin'].$time_in),
 					'reservation_reserved_at'=>strtotime('now'),
 					'reservation_updated_at'=>strtotime('now'),
-					'reservation_out'=>strtotime($i['checkout']),
+					'reservation_out'=>strtotime($i['checkout'].$time_out),
 					'reservation_adult'=>$i['inputAdult'],
 					'reservation_child'=>$i['inputChild'],
 					'reservation_roomCount'=>isset($i['allReservedRoomQty'][$j]) ? $i['allReservedRoomQty'][$j] : 0,

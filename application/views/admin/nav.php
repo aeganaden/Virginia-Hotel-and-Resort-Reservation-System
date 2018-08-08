@@ -5,6 +5,8 @@
 		</a>
 		<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 		<ul class="right hide-on-med-and-down">
+			<li><a href="<?=base_url()?>Admin">Reports<i class="material-icons left">assessment</i></a></li> 
+			<li><a href="<?=base_url()?>Admin/moderators">Moderators<i class="material-icons left">person_add</i></a></li> 
 			<li><a href="<?=base_url()?>Admin/logout">Log out <i class="material-icons left">arrow_back</i></a></li> 
 		</ul>
 	</div>
@@ -12,5 +14,7 @@
 
 
 <ul class="sidenav" id="mobile-demo">
-	<li><a href="<?=base_url()?>Admin/logout">Logout</a></li> 
+	<li><a href="<?=base_url()?>Admin">Reports<i class="material-icons left">assessment</i></a></li> 
+	<li><a href="<?=base_url()?>Admin/moderators">Moderators<i class="material-icons left">person_add</i></a></li> 
+	<li><a href="<?=base_url()?>Admin/logout">Log out <i class="material-icons left">arrow_back</i></a></li> 
 </ul>

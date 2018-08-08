@@ -9,7 +9,7 @@
 			<h3 style="font-weight: 300">List of Moderators </h3>
 		</blockquote>
 		<button class="btn right waves-effect waves-light modal-trigger" data-target="mdlCreateModer"><i class="material-icons left">person_add</i>add moderator</button>
-		<table class="datatable hover">
+		<table class="datatable hover responsive-table">
 			<thead>
 				<tr>
 					<th>First Name</th>

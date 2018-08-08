@@ -18,8 +18,17 @@
 	<!-- Datatables Css --> 
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
+	<!-- Calendar Css -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css"> 
 	<!-- jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!-- MomentJs -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script> 
+	
+	<!-- CalendarJs -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script> 
+
 
 	<!-- Datatables Js -->
 	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>

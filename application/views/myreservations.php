@@ -94,9 +94,7 @@
 						<div class="col s12 m7"> 
 							<!-- RESERVATION DETAILS -->
 							<?php 
-							$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay";
-							$time_in = $reservation[0]->reservation_day_type == 1 ? "8:00 AM": "6:00 PM";
-							$time_out = $reservation[0]->reservation_day_type == 1 ? "5:00 PM": "5:00 AM";
+							$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay"; 
 							?>
 							<div class="card orange accent-3" id="reservationDetails"  style="display: none">
 								<div class="card-content white-text">
@@ -121,13 +119,13 @@
 											<div class="input-field col s6">
 												<i class="material-icons prefix black-text">event_available</i>
 
-												<input id="icon_prefix" disabled value="<?=date('M d, Y', $reservation[0]->reservation_in)?> - <?=$time_in?>" type="text" class="validate">
+												<input id="icon_prefix" disabled value="<?=date('M d, Y - h:i A', $reservation[0]->reservation_in)?>" type="text" class="validate">
 												<label for="icon_prefix">Check In</label>
 											</div>
 
 											<div class="input-field col s6">
 												<i class="material-icons prefix black-text">event_busy</i>
-												<input id="icon_prefix" disabled value="<?=date('M d, Y', $reservation[0]->reservation_out)?> - <?=$time_out?>" type="text" class="validate">
+												<input id="icon_prefix" disabled value="<?=date('M d, Y - h:i A', $reservation[0]->reservation_out)?>" type="text" class="validate">
 												<label for="icon_prefix">Check Out</label>
 											</div>
 										</div>
@@ -245,7 +243,11 @@
 										<!-- Misc. Mattress -->
 										<?php 
 										$miscs = $this->Crud->fetch_like('billing','billing_name','Misc. Mattress', array('reservation_key' => $reservation[0]->reservation_key ));
-										$totalMattress = $miscs[0]->billing_quantity; 
+										if ($miscs) {
+											$totalMattress = $miscs[0]->billing_quantity;
+										}else{
+											$totalMattress = 0;
+										} 
 										?>
 										<div class="row">
 											<div class="input-field col s1">

@@ -22,6 +22,13 @@ class Crud extends CI_Model {
 	}
 
 
+	public function fetchDateBetween($table,$start,$end) {
+		$this->db->where('reservation_in BETWEEN "'. $start. '" and "'.  $end.'" AND reservation_status = 1'); 
+		$query = $this->db->get($table);
+		return ( $query->num_rows() > 0) ? $query->result() : FALSE;
+	}
+
+
 	public function fetch_or($table, $where = NULL, $orwhere = NULL) {
 		if (!empty($where)) {
 			$this->db->where($where);
