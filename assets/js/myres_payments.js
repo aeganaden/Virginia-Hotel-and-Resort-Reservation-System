@@ -18,12 +18,6 @@ $(document).ready(function() {
 	$("[type='number']").keypress(function (evt) {
 		evt.preventDefault();
 	});
-	
-
-	$(".btnPrintReceipt").click(function(event) {
-		alert('shit ka');
-	});
-
 
 	$("#chkRoom_0").change(function(event) {
 		var atLeastOneIsChecked = $('input:checkbox').is(':checked');
@@ -518,7 +512,22 @@ $(document).ready(function() {
 	});
 	/*=====  End of PAYMENT  ======*/
 
-
-
+	//LAST --mark
+	$(".btnPrintReceipt").on('click', function(event) {
+		var form_data = $('#fileUpload').serialize();
+		var rID = $(this).data('id');
+		$.ajax({
+            url: base_url+'Payments/downloadPDF/'+rID, // point to server-side controller method
+            dataType: 'json', // what to expect back from the server
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            type: 'post',
+            success: function (data) {  
+            	console.log(data)
+            }
+        });
+	});
 });
 

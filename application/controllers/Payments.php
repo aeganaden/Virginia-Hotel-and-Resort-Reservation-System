@@ -148,6 +148,11 @@ class Payments extends CI_Controller {
 	}
 	
 
+	public function downloadPDF(){
+		$input = $this->input->post(NULL, TRUE);
+		echo json_encode($input);
+	}
+
 }
 
 /* End of file Payments.php */
