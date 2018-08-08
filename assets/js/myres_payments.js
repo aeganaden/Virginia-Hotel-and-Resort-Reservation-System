@@ -19,9 +19,9 @@ $(document).ready(function() {
 		evt.preventDefault();
 	});
 	
-	
+
 	$(".btnPrintReceipt").click(function(event) {
-		alert();
+		alert('shit ka');
 	});
 
 
