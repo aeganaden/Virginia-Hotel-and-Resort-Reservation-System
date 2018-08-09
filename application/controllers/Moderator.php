@@ -107,13 +107,59 @@ class Moderator extends CI_Controller {
 
 	public function approveReservation()
 	{
-		$key = $this->input->post('rKey'); 
+		$r_key = $this->input->post('rKey'); 
+		$reservations = $this->Crud->fetch('reservation',array('reservation_key'=>$r_key));
 
-		if ($this->Crud->update('reservation',array('reservation_status'=>1),array('reservation_key'=>$key))) {
-			echo json_encode(true);
-		}else{
-			echo json_encode("Failed to update reservation");
+		// USER ROOM COUNT
+		$roomCount = array();
+		foreach ($reservations as $key => $value) {
+			array_push($roomCount, $value->reservation_roomCount);
 		}
+
+		// AVAILABLE ROOMS
+		$room_1 = $this->Crud->countResult('room',array('room_type_id' => 1, 'room_status' => 3));
+		$room_2 = $this->Crud->countResult('room',array('room_type_id' => 2, 'room_status' => 3));
+
+		// echo json_encode("TANGINA MO"); 
+		if ($room_1 < $roomCount[0]) {
+			echo json_encode(["PROBLEM - INSUFFICIENT ROOMS","There are no enough rooms for Single Bedroom"]);  
+		}else if ($room_2 < $roomCount[1]) {
+			echo json_encode(["PROBLEM - INSUFFICIENT ROOMS","There are no enough rooms for Double Bedroom"]);   
+		}else{
+			
+			if ($roomCount[0] > 0) {
+				$i = 1;
+				$room_1_available = $this->Crud->fetch('room',array('room_type_id' => 1, 'room_status' => 3));
+				foreach ($room_1_available as $key => $value) { 
+					$this->Crud->update('room',array('room_status'=>1, 'reservation_key'=>$r_key),array('room_id'=>$value->room_id));
+					if ($i == $roomCount[0]) {
+						break;
+					}
+					$i++;
+				}
+			}
+			
+			if ($roomCount[1] > 0) {
+				$i = 1;
+				$room_2_available = $this->Crud->fetch('room',array('room_type_id' => 2, 'room_status' => 3));
+				foreach ($room_2_available as $key => $value) { 
+					$this->Crud->update('room',array('room_status'=>1, 'reservation_key'=>$r_key),array('room_id'=>$value->room_id));
+					if ($i == $roomCount[1]) {
+						break;
+					}
+					$i++;
+				}
+			}
+
+			if ($this->Crud->update('reservation',array('reservation_status'=>1),array('reservation_key'=>$r_key))) {
+				echo json_encode(true);
+			}else{
+				echo json_encode("Failed to update reservation");
+			}
+		}
+
+
+		
 	}
 
 	public function denyReservation()

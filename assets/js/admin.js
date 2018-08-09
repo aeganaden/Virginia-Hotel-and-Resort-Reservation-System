@@ -7,7 +7,8 @@ $(document).ready(function() {
 			center: '',
 			right:  'today prev,next month basicWeek listWeek'
 		},  
-		timezone: 'Asia/Manila',
+		timezone: 'Asia/Manila', 
+		selectable: true,
 		events: function(start, end, timezone, callback) {  
 			jQuery.ajax({
 				url: base_url+'Moderator/fetchReservations',
@@ -68,14 +69,21 @@ $(document).ready(function() {
 					var instance = M.Modal.getInstance(document.getElementById('mdlViewResDetails'));
 					instance.open();
 				}  
+			}); 
+		},
+		select:  function(startDate, endDate) {
+			// alert('selected ' + startDate.format() + ' to ' + endDsate.subtract(1,'day').format());
+			swal({
+				title: "ADD RESEVATION?",
+				icon: 'info',
+				text: 'Click okay to proceed to reservation details',
+				buttons: true,
+			}).then((proceed)=>{
+				if (proceed) {
+
+				}
 			});
-			
-
-
-			// alert('Event: ' + calEvent.title);
-			// alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-			// alert('View: ' + view.name);
-		}
+		}, 
 	});
 
 
@@ -171,11 +179,17 @@ $(document).ready(function() {
 					console.log(data)
 					if (data == true) {
 						swal({
-							title: "RERVATION UPDATED!",
+							title: "RERVATION HASE BEEN APPROVED!",
 							icon: 'success'
 						}).then((reload)=>{ 
 							location.reload();
 						})
+					}else{
+						swal({
+							title: data[0],
+							icon: 'error',
+							text: data[1]
+						}) 
 					}
 				}
 			});
@@ -193,23 +207,25 @@ $(document).ready(function() {
 			buttons: true,
 			icon: 'error'
 		}).then((deny)=>{
-			$.ajax({
-				url: base_url + 'Moderator/denyReservation',
-				type: 'post',
-				dataType: 'json',
-				data: {rKey},
-				success: function(data){
-					console.log(data)
-					if (data == true) {
-						swal({
-							title: "RERVATION DENIED!",
-							icon: 'success'
-						}).then((reload)=>{ 
-							location.reload();
-						})
+			if (deny) {
+				$.ajax({
+					url: base_url + 'Moderator/denyReservation',
+					type: 'post',
+					dataType: 'json',
+					data: {rKey},
+					success: function(data){
+						console.log(data)
+						if (data == true) {
+							swal({
+								title: "RERVATION DENIED!",
+								icon: 'success'
+							}).then((reload)=>{ 
+								location.reload();
+							})
+						}
 					}
-				}
-			});
+				});
+			}
 		});
 	});
 
