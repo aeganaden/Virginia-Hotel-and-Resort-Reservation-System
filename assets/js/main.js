@@ -567,8 +567,7 @@ $(".btnProceed").click(function(event) {
         address,
         email, 
         totalCharge,
-      },success: function(data){ 
-        console.log(data)
+      },success: function(data){  
         if (data[0] == true) {
           swal({
             title: "TRANSACTION KEY: "+data[1],

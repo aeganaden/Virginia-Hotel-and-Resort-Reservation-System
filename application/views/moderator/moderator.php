@@ -6,13 +6,13 @@
 	<div class="col s2"></div>
 	<div class="col s9"> 
 		<blockquote>
-			<h4 style="font-weight: 300">RESERVATIONS</h4>
+			<h4 style="font-weight: 300" class="blue-text text-darken-4">RESERVATIONS</h4>
 		</blockquote>
 		<div class="row">
 			<div class="col s6">
 				<ul class="tabs">
-					<li class="tab col s6 grey lighten-4 "><a class="active blue-text text-darken-4 waves-effect"  href="#pendingReservations">Pending Reservations</a></li>
-					<li class="tab col s6 grey lighten-4 "><a class="blue-text text-darken-4 waves-effect" href="#calendarView">Calendar</a></li> 
+					<li class="tab col s6 grey lighten-4 active"><a class=" blue-text text-darken-4 waves-effect"  href="#pendingReservations">Pending Reservations</a></li>
+					<li class="tab col s6 grey lighten-4 "><a class=" blue-text text-darken-4 waves-effect" href="#calendarView">Calendar</a></li> 
 				</ul>
 			</div>
 
@@ -71,8 +71,224 @@
 					</table>
 				</div>
 				<div id="calendarView" class="col s12"> 
-					<div class="row" style="padding-top: 5%;">
+					<div class="row" id="divCalendar" style="padding-top: 5%;">
 						<div id='calendar'></div>
+					</div>
+					<div class="row" id="divAddRes" style="display: none;">
+						<div class="col s1"></div>
+						<div class="col s11">
+							<br>
+							<blockquote>
+								<h5 style="font-weight: 300" class="orange-text text-accent-3">ADD RESERVATION</h5>
+							</blockquote>
+							<div class="row" id="resGuestDetailsDiv">
+								<div class="col s6">
+									<ul class="tabs" id="addReservationTab">
+										<li class="tab col s6 grey lighten-4"><a class="active orange-text text-accent-3" href="#resDetails">RESERVATION DETAILS</a></li>
+										<li class="tab col s6 grey lighten-4"><a  class="orange-text text-accent-3" href="#guestDetails">GUEST DETAILS</a></li>  
+									</ul>
+								</div>
+								<div id="resDetails" class="col s12">
+									<!--=========================================
+									=            RESERVATION DETAILS            =
+									==========================================--> 
+									<br> 
+									<!-- CHECK IN & CHECK OUT DATE -->
+									<div class="row">
+										<div class="input-field col s6">
+											<i class="material-icons prefix">event</i> 
+											<input value="" id="add_checkin" placeholder="Some Data"  type="text" class="datepicker picker1">
+											<label for="add_checkin"><span class="">Check In</span></label>
+										</div>
+										<div class="input-field col s6">
+											<i class="material-icons prefix">event</i>
+											<input value="" id="add_checkout" placeholder="Some Data"  type="text" class="datepicker picker2">
+											<label for="add_checkout"><span class="">Check out</span></label>
+										</div>
+									</div>
+
+									<!-- LENGTH OF STAY AND STAY TYPE -->
+									<div class="row"> 
+										<div class="input-field col s12">
+											<i class="material-icons prefix">brightness_4</i>
+											<select id="add_stayType">
+												<option value="" disabled>Choose Stay Type</option>
+												<option value="1" selected>Day Stay</option>
+												<option value="2">Night Stay</option> 
+											</select>
+											<label>Stay Type</label> 
+										</div>
+									</div>
+
+									<!-- GUEST COUNT -->
+									<div class="row">
+										<div class="input-field col s6">
+											<i class="material-icons prefix">face</i>
+											<input value="1" id="add_adultCount" min="1" type="number" class="validate">
+											<label for="add_adultCount"><span class="">Adult Count</span></label>
+										</div>
+										<div class="input-field col s6">
+											<i class="material-icons prefix">child_care</i>
+											<input value="0" placeholder="Some Data" id="add_childCount" min="0" type="number" class="validate">
+											<label for="add_childCount"><span class="">Child Count</span></label>
+										</div>
+									</div>
+
+									<!-- ROOMS -->
+									<?php  $room_type = $this->Crud->fetch('room_type');  ?>
+									<?php foreach ($room_type as $key => $value): ?>
+										<?php $room_max =  $this->Crud->countResult('room',array("room_type_id"=>$value->room_type_id,"room_status"=>3));  ?>
+										<div class="row">
+											<div class="input-field col s1">
+												<p>
+													<label>
+														<input type="checkbox" name="chkRoom" id="chkRoom_<?=$key?>" checked/> 
+														<span></span>
+													</label>
+												</p>
+											</div>
+											<div class="input-field col s5">
+												<i class="material-icons prefix">hotel</i>
+												<input id="roomType_<?=$key?>" disabled data-pax="<?=$value->room_type_pax?>" value="<?=$value->room_type_name?>" type="text" class=" validate">
+												<label for="roomType_<?=$key?>">Room Type</label>
+											</div>
+
+											<div class="input-field col s3">
+												<i class="material-icons prefix">monetization_on</i>
+												<input id="icon_prefix" disabled value="P<?=number_format($value->room_type_price)?>" type="text" class="validate">
+												<label for="icon_prefix">Room Price</label>
+											</div>
+
+											<div class="input-field col s3">
+												<i class="material-icons prefix">border_clear</i>
+												<input id="Room_<?=$key?>" value="1" min="0" max="<?=$room_max?>" type="number" class=" validate">
+												<label for="Room_<?=$key?>">Room Count</label>
+											</div>
+										</div>
+									<?php endforeach ?>
+
+									<button class="btn waves-effect waves-light left red btnReturnCalendar"><i class="material-icons right">cancel</i>CANCEL</button>
+
+									<button class="btn waves-effect waves-light right orange accent-3 btnProceedGuest"><i class="material-icons right">chevron_right</i>Guest Details</button>
+									<!--====  End of RESERVATION DETAILS  ====-->
+									
+								</div>
+								<div id="guestDetails" class="col s12">
+									<div class="row">
+										<div class="input-field col s4">
+											<i class="material-icons prefix">account_circle</i>
+											<input id="add_firstname" type="text" class="validate">
+											<label for="add_firstname">First Name</label>
+										</div>
+										<div class="input-field col s4">
+											<input id="add_lastname" type="tel" class="validate">
+											<label for="add_lastname">Last Name</label>
+										</div>
+										<div class="input-field col s4">
+											<i class="material-icons prefix">supervisor_account</i>
+											<select id="add_gender">
+												<option value="" disabled>Choose your gender</option>
+												<option value="male" selected>Male</option>
+												<option value="female">Female</option> 
+											</select>
+											<label>Gender</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="input-field col s4">
+											<i class="material-icons prefix">contact_phone</i>
+											<input id="add_phone" type="text" class="validate">
+											<label for="add_phone">Phone Number</label>
+										</div>
+										<div class="input-field col s8">
+											<i class="material-icons prefix">contact_mail</i>
+											<input id="add_email" type="email" class="validate">
+											<label for="add_email">Email</label>
+										</div>
+										
+									</div>
+									<div class="row">
+										<div class="input-field col s12">
+											<i class="material-icons prefix">store_mall_directory</i> 
+											<input id="add_address" type="text" class="validate">
+											<label for="add_address">Address</label>
+										</div> 
+									</div>
+									<div class="row">
+										<div class="input-field col s12">
+											<i class="material-icons prefix">insert_comment</i>  
+											<textarea id="add_request" class="materialize-textarea"></textarea>
+											<label for="add_request">Note/Request</label>
+										</div>
+									</div>
+
+									<button class="btn waves-effect waves-light left grey btnReturnResDes"><i class="material-icons left">chevron_left</i>Reservation Details</button>
+									<button class="btn waves-effect waves-light right orange accent-3  btnProceedSubmit"><i class="material-icons right">chevron_right</i>SUMMARY</button>
+
+								</div> 
+							</div>
+
+							<!-- SUMMARY DIV -->
+							<div class="row" id="summaryDiv" style="display: none;">
+								<div class="row">
+									<div class="col s4">
+										<div class="col s12">
+											<div class="card blue darken-2">
+												<div class="card-content white-text">
+													<span class="card-title">Your stay:</span>
+													<p>Type of stay <span class="stayType right  yellow-text text-lighten-2">-</span></p>
+													<p>Check-in Date <span class="checkInDate right yellow-text text-lighten-2">-</span></p>
+													<p>Check-out Date <span class="checkOutDate right yellow-text text-lighten-2">-</span></p>
+													<p>Length of Stay <span class="stayLength right yellow-text text-lighten-2">-</span></p>
+												</div> 
+											</div>
+										</div>
+									</div>
+									<div class="col s1"></div>
+									<div class="col s7">
+										<div class="col s12">
+											<div class="card blue darken-2">
+												<div class="card-content white-text">
+													<span class="card-title center">SUMMARY</span>
+													<div class="divider white"></div> 
+													<br><br>
+													<div class="row">
+														<div class="col s4"><b>ROOM</b></div>
+														<div class="col s2"><b>QTY</b></div>
+														<div class="col s2"><b>PRICE</b></div>
+														<div class="col s2"><b>DAYS</b></div>
+														<div class="col s2"><b>TOTAL</b></div>
+														<!-- ROOMS -->
+														<div class="roomsDiv"> 
+														</div> 
+													</div> 
+													<?php 
+													// FETCH TAX
+													$tax = $this->Crud->fetch('settings');
+													$tax = $tax[0];
+													?>
+													<div class="row">
+														<p><b>Room Costs</b> <span class="right totalRoomCosts yellow-text">P1000</span></p>
+														<p><b>Length of Stay</b> <span class="right stayLength yellow-text">P1000</span></p>
+														<p><b>Tax %</b> <span class="right taxPercent yellow-text" data-tax="<?=$tax->settings_tax?>"><b><?=$tax->settings_tax?>%</b></span></p>
+														<p><b>Tax Fee</b> <span class="right taxFee yellow-text">P1000</span></p>
+														<p><b>Fees</b> <span class="right addFee yellow-text"></span></p>
+													</div>
+													<div class="row">
+														<h5 class="white-text right">TOTAL: <span class="totalCosts yellow-text">P1000</span></h5>
+													</div>
+
+												</div>
+
+
+											</div>
+										</div>
+									</div>
+								</div>
+								<button class="btn waves-effect waves-light left grey btnReturnGuestDes"><i class="material-icons left">chevron_left</i>Guest Details</button>
+								<button class="btn waves-effect waves-light right orange accent-3 btnSubmitReservation"><i class="material-icons right">check</i>SUBMIT</button>
+							</div>
+						</div>
 					</div>
 				</div> 
 			</div>
@@ -87,7 +303,7 @@
 				<div class="divider black"></div>
 				<br>
 				<center>
-					<img class="materialboxed" id="imgContainer" src="" alt="">
+					<img class="materialboxed responsive-img" id="imgContainer" src="" alt="">
 				</center>
 			</div>
 			<div class="modal-footer blue lighten-5">
