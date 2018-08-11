@@ -514,15 +514,18 @@ $(document).ready(function() {
 
 	//LAST --mark
 	$(".btnPrintReceipt").on('click', function(event) {
-		var form_data = $('#fileUpload').serialize();
-		var rID = $(this).data('id');
+		event.preventDefault();
+		//src: https://stackoverflow.com/questions/15958671/disabled-fields-not-picked-up-by-serializearray/15958900
+		var myform = $('#fileUpload');
+		var disabled = myform.find(':input:disabled').removeAttr('disabled');
+		var serialized = myform.serializeArray();
+		disabled.attr('disabled','disabled');
+
+		var rID = $('.btnPrintReceipt').data('id');
 		$.ajax({
             url: base_url+'Payments/downloadPDF/'+rID, // point to server-side controller method
             dataType: 'json', // what to expect back from the server
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: form_data,
+            data: serialized,
             type: 'post',
             success: function (data) {  
             	console.log(data)

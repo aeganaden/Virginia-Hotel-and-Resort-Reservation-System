@@ -51,12 +51,12 @@
 												<div class="input-field col s6">
 													<i class="material-icons prefix">event</i>
 
-													<input disabled value="<?=date('M d, Y - h:i A', $reservation[0]->reservation_in)?>" id="checkin" type="text" class="checkin validate white-text">
+													<input disabled value="<?=date('M d, Y - h:i A', $reservation[0]->reservation_in)?>" id="checkin" name="checkin" type="text" class="checkin validate white-text">
 													<label for="checkin"><span class="white-text">Check In</span></label>
 												</div>
 												<div class="input-field col s6">
 													<i class="material-icons prefix">event</i>
-													<input disabled value="<?=date('M d, Y - h:i A', $reservation[0]->reservation_out)?>" id="checkout" type="text" class="checkout validate white-text">
+													<input disabled value="<?=date('M d, Y - h:i A', $reservation[0]->reservation_out)?>" id="checkout" type="text" name="checkout" class="checkout validate white-text">
 													<label for="checkout"><span class="white-text">Check out</span></label>
 												</div>
 											</div>
@@ -64,12 +64,12 @@
 											<div class="row">
 												<div class="input-field col s6">
 													<i class="material-icons prefix">hourglass_empty</i>
-													<input disabled value="<?=$difference->d+1?> Day/s" id="lengthStay" type="text" class="validate white-text lengthStay">
+													<input disabled value="<?=$difference->d+1?> Day/s" id="lengthStay" name="lengthStay" type="text" class="validate white-text lengthStay">
 													<label for="lengthStay"><span class="white-text">Length of Stay</span></label>
 												</div>
 												<div class="input-field col s6">
 													<i class="material-icons prefix">brightness_4</i>
-													<input disabled value="<?=$stay_type?>" id="roomCount" type="text" class="validate white-text roomCount">
+													<input disabled value="<?=$stay_type?>" id="roomCount" name="stay_type" type="text" class="validate white-text roomCount">
 													<label for="roomCount"><span class="white-text">Stay Type</span></label>
 												</div>
 											</div>
@@ -77,12 +77,12 @@
 											<div class="row">
 												<div class="input-field col s6">
 													<i class="material-icons prefix">face</i>
-													<input disabled value="<?=$reservation[0]->reservation_adult?> Adult/s" id="lengthStay" type="text" class="validate white-text lengthStay">
+													<input disabled value="<?=$reservation[0]->reservation_adult?> Adult/s" id="lengthStay" type="text" class="validate white-text lengthStay" name="adult_count">
 													<label for="lengthStay"><span class="white-text">Adult Count</span></label>
 												</div>
 												<div class="input-field col s6">
 													<i class="material-icons prefix">child_care</i>
-													<input disabled value="<?=$reservation[0]->reservation_child?> Child/ren" id="roomCount" type="text" class="validate white-text roomCount">
+													<input disabled value="<?=$reservation[0]->reservation_child?> Child/ren" id="roomCount" type="text" class="validate white-text roomCount" name="child_count">
 													<label for="roomCount"><span class="white-text">Child Count</span></label>
 												</div>
 											</div>
@@ -94,7 +94,7 @@
 												<div class="row">
 													<div class="input-field col s4">
 														<i class="material-icons prefix">hotel</i>
-														<input id="icon_prefix" disabled value="<?=$room_type->room_type_name?>" type="text" class=" white-text validate">
+														<input id="icon_prefix" disabled value="<?=$room_type->room_type_name?>" type="text" name="room_type" class=" white-text validate">
 														<label for="icon_prefix" class="white-text">Room Type</label>
 													</div>
 
@@ -106,7 +106,7 @@
 
 													<div class="input-field col s4">
 														<i class="material-icons prefix">monetization_on</i>
-														<input id="icon_prefix" disabled value="P<?=number_format($room_type->room_type_price)?>" type="text" class=" white-text validate">
+														<input id="icon_prefix" disabled value="P<?=number_format($room_type->room_type_price)?>" type="text" class=" white-text validate" name="room_price">
 														<label for="icon_prefix" class="white-text">Room Price</label>
 													</div>
 												</div>
