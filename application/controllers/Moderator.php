@@ -32,6 +32,17 @@ class Moderator extends CI_Controller {
 
 	}
 
+	public function checkout()
+	{
+		$rKey = $this->input->post('rKey');
+
+		if ($this->Crud->update('reservation',array('reservation_status'=>5),array('reservation_key'=>$rKey))) {
+			echo json_encode(true);
+		}else{
+			echo json_encode("Failed to update reservation");
+		}
+	}
+
 	public function fetchReservations()
 	{
 		$start = $this->input->post('start');
@@ -197,8 +208,37 @@ class Moderator extends CI_Controller {
 		// Room 2 Count
 		$reservation->room_2 = $reservation_1->reservation_roomCount;
 
+		// Miscellaneous 
+		$miscs = $this->Crud->fetch_like('billing','billing_name','Misc.', array('reservation_key' => $rKey));
+		$reservation->miscs = $miscs;
+
+		// Total Billing
+		$billing = $this->Crud->getSum('billing','billing_price',array('reservation_key'=>$rKey));
+		$reservation->billing = $billing;
 		echo json_encode($reservation);
 
+	}
+
+	public function addBilling()
+	{
+		$miscName = $this->input->post('miscName');
+		$miscPrice = $this->input->post('miscPrice');
+		$miscQty = $this->input->post('miscQty');
+		$rKey = $this->input->post('rKey');
+		$boolean = true;
+		foreach ($miscName as $key => $value) {
+			$data = array( 
+				"billing_price"=>$miscPrice[$key],
+				"billing_name"=>"Misc. ".ucwords($value),
+				"billing_quantity"=>$miscQty[$key],
+				"reservation_key"=>$rKey,
+			);
+			if (!$this->Crud->insert('billing',$data)) {
+				$boolean = false;
+			}
+		}
+
+		echo json_encode($boolean == true ? true : "Failed to add billing");
 	}
 
 

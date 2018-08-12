@@ -120,27 +120,48 @@ $(document).ready(function() {
 				data: {
 					rKey
 				},
-				success: function(data){ 
+				success: function(data){  
+					console.log(data)
+					// totalFee
+					$(".totalFee").html('P'+ numeral(data.billing[0].billing_price).format('0,0'));
 					$(".titleKey").html(rKey);
-					$("#checkin").val(moment.unix(data.reservation_in).format("MMMM Do, YYYY"));
-					$("#checkout").val(moment.unix(data.reservation_out).format("MMMM Do, YYYY"));
-					$("#lengthStay").val(data.stay_length + " Day/s");
-					$("#stayType").val(data.stay_type);
-					$("#adultCount").val(data.reservation_adult + " Adult/s");
-					$("#childCount").val(data.reservation_child + " Child/ren");
+					$("#checkin").html(moment.unix(data.reservation_in).format("MMMM Do, YYYY"));
+					$("#checkout").html(moment.unix(data.reservation_out).format("MMMM Do, YYYY"));
+					$("#lengthStay").html(data.stay_length + " Day/s");
+					$("#stayType").html(data.stay_type);
+					$("#adultCount").html(data.reservation_adult + " Adult/s");
+					$("#childCount").html(data.reservation_child + " Child/ren");
+
+					$(".btnUpdateBilling").attr('data-key', rKey);
+					$(".btnCheckout").attr('data-key', rKey);
 					if (data.reservation_roomCount > 0) {
 						$("#roomType1").css('display', 'block');
-						$("#roomType1_lbl").val(data.room_1_type);
-						$("#roomType1_count").val(data.reservation_roomCount);
+						$("#roomType1_lbl").html(data.room_1_type);
+						$("#roomType1_count").html(data.reservation_roomCount + " Room/s");
 					}else{
 						$("#roomType1").css('display', 'none'); 
 					}
 					if (data.room_2 > 0) {
 						$("#roomType2").css('display', 'block');
-						$("#roomType2_lbl").val(data.room_2_type);
-						$("#roomType2_count").val(data.room_2);
+						$("#roomType2_lbl").html(data.room_2_type);
+						$("#roomType2_count").html(data.room_2 + " Room/s");
 					}else{
 						$("#roomType2").css('display', 'none');
+					}
+					// MISCS
+					if (data.miscs == false) {
+						$(".miscsTitle").html('NO MISCELLANEOUS');
+						$("#miscsDiv").html("");
+
+					}else{
+						$(".miscsTitle").html('MISCELLANEOUS');
+						let htmlMiscs = '<div class="col s6"><p>Misc Name</p></div><div class="col s2"><p>Qty</p></div><div class="col s4"><p>Price</p></div>';
+
+						data.miscs.forEach((data,key)=>{
+							htmlMiscs+= '<div class="col s6"><p>'+data.billing_name+'</p></div><div class="col s2"><p>'+data.billing_quantity+'</p></div><div class="col s4"><p>P'+data.billing_price+'</p></div>';
+						});
+
+						$("#miscsDiv").html(htmlMiscs);
 					}
 					var instance = M.Modal.getInstance(document.getElementById('mdlViewResDetails'));
 					instance.open();
@@ -157,11 +178,13 @@ $(document).ready(function() {
 
 			swal({
 				title: "ADD RESEVATION?",
-				icon: 'info',
+				type: 'info',
 				text: 'Click okay to proceed to reservation details',
-				buttons: true,
+				reverseButtons: true, 
+				showCancelButton: true,
+
 			}).then((proceed)=>{ 
-				if (proceed) {
+				if (proceed.value) {
 					$("#add_checkin").val(startDate.format('MMM DD, YYYY'));
 					$("#add_checkout").val(endDate.subtract(1,'day').format('MMM DD, YYYY'));
 
@@ -183,160 +206,201 @@ $(document).ready(function() {
 			});
 		}, 
 	}); 
-	$(".btnProceedGuest").click(function(event) {
-		var instance = M.Tabs.getInstance(document.getElementById('addReservationTab'));
-		instance.select('guestDetails'); 
+$(".btnProceedGuest").click(function(event) {
+	var instance = M.Tabs.getInstance(document.getElementById('addReservationTab'));
+	instance.select('guestDetails'); 
+});
+
+// CHECKOUT
+$(".btnCheckout").click(function(event) {
+	let rKey = $(this).data('key');
+	swal({
+		title: "RESERVATION CHECKOUT",
+		type: 'question',
+		text: 'Are you sure to check out this reservation?',
+		reverseButtons: true,
+		showCancelButton: true,
+	}).then((checkout)=>{
+		if (checkout.value) {
+			$.ajax({
+				url: base_url + 'Moderator/checkout',
+				type: 'post',
+				dataType: 'json',
+				data: {
+					rKey
+				},
+				success:function (data){
+					if (data == true) {
+						swal({
+							title: "SUCCESFULLY CHECKED OUT",
+							type: "success",
+							text: 'Succesfully checked out!',
+							closeOnClickOutside: false,
+						}).then(()=>{
+							location.reload();
+						});
+					}else{
+						swal("ERROR", {
+							type: "error",
+							text: data,
+							closeOnClickOutside: false,
+						}).then(()=>{
+							location.reload();
+						});
+					}
+				}
+			});
+
+		}
 	});
+});
 
 
 
-// totalCosts 
+
 let totalCosts = 0;
 $(".btnProceedSubmit").click(function(event) {
 	let totalRoomCosts = 0;
 	let feesHTML = [];
 	let roomsHTML = [];
 
-	// DATES BETWEEN
-	let dates = getDates(new Date($(".checkInDate").html()),new Date($(".checkOutDate").html())); 
+		// DATES BETWEEN
+		let dates = getDates(new Date($(".checkInDate").html()),new Date($(".checkOutDate").html())); 
 
-	// USER ROOM COUNT
-	let room1_count = $("#Room_0").val();
-	let room2_count = $("#Room_1").val();
+		// USER ROOM COUNT
+		let room1_count = $("#Room_0").val();
+		let room2_count = $("#Room_1").val();
 
-	// ROOM PAX
-	let room_0_pax = $("#roomType_0").data('pax');
-	let room_1_pax = $("#roomType_1").data('pax');
-	let totalRoomPax = room_0_pax + room_1_pax;
+		// ROOM PAX
+		let room_0_pax = $("#roomType_0").data('pax');
+		let room_1_pax = $("#roomType_1").data('pax');
+		let totalRoomPax = room_0_pax + room_1_pax;
 
-	// USER PAX
-	let adultCount = $("#add_adultCount").val();
-	let childCount = $("#add_childCount").val();
-	let totalUserPax = parseInt(adultCount) + parseInt(childCount);
+		// USER PAX
+		let adultCount = $("#add_adultCount").val();
+		let childCount = $("#add_childCount").val();
+		let totalUserPax = parseInt(adultCount) + parseInt(childCount);
 
-
-	// ROOM FEE
-	if (room1_count > 0) {
-		roomsHTML.push('<div class="col s4">'+$("#roomType_0").val()+'</div>'+
-			'<div class="col s2">'+room1_count+'</div>'+
-			'<div class="col s2">'+(1500).toLocaleString()+'</div>'+
-			'<div class="col s2">'+dates.length+' Day/s</div>'+
-			'<div class="col s2">P'+((room1_count*1500*(dates.length)).toLocaleString())+'</div>');
-		totalRoomCosts += (room1_count*1500);
-	}
-	if (room2_count > 0) {
-		roomsHTML.push('<div class="col s4">'+$("#roomType_1").val()+'</div>'+
-			'<div class="col s2">'+room2_count+'</div>'+
-			'<div class="col s2">'+(2000).toLocaleString()+'</div>'+
-			'<div class="col s2">'+dates.length+' Day/s</div>'+
-			'<div class="col s2">P'+((room2_count*2000*(dates.length)).toLocaleString())+'</div>');
-		totalRoomCosts += (room2_count*2000); 
-	}
-	totalRoomCosts *= dates.length;
-
-	// ROOM FEE HTML
-	$(".totalRoomCosts").html('<b>P'+totalRoomCosts.toLocaleString()+'</b>')
-	totalCosts += (totalRoomCosts);
-
-	// IF EXCESSIVE PAX
-	if (totalRoomPax < totalUserPax) {  
-		feesHTML.push('<b>Add. Pax - P500</b>');
-		totalCosts += 500;
-	}
-
-	// ENTRANCE FEE 
-	if (dates.length < 2) {
-		let adultEntFee = 0;
-		let childEntFee = 0;
-
-		// IF DAY/NIGHT STAY 
-		if ($("#add_stayType").val() == 1) {
-			adultEntFee = adultCount * 80;
-			if (childCount > 0) { 
-				childEntFee = childCount * 50;
-			}
-		}else{
-			adultEntFee = adultCount * 100;
-			if (childCount > 0) { 
-				childEntFee = childCount * 70;
-			}
+		// ROOM FEE
+		if (room1_count > 0) {
+			roomsHTML.push('<div class="col s4">'+$("#roomType_0").val()+'</div>'+
+				'<div class="col s2">'+room1_count+'</div>'+
+				'<div class="col s2">'+(1500).toLocaleString()+'</div>'+
+				'<div class="col s2">'+dates.length+' Day/s</div>'+
+				'<div class="col s2">P'+((room1_count*1500*(dates.length)).toLocaleString())+'</div>');
+			totalRoomCosts += (room1_count*1500);
 		}
-
-		feesHTML.push('Adult/s  ('+adultCount+') - P' + adultEntFee);
-
-		if (childCount > 0) {   
-			feesHTML.push('Child/ren  ('+childCount+') - P' + childEntFee );  
+		if (room2_count > 0) {
+			roomsHTML.push('<div class="col s4">'+$("#roomType_1").val()+'</div>'+
+				'<div class="col s2">'+room2_count+'</div>'+
+				'<div class="col s2">'+(2000).toLocaleString()+'</div>'+
+				'<div class="col s2">'+dates.length+' Day/s</div>'+
+				'<div class="col s2">P'+((room2_count*2000*(dates.length)).toLocaleString())+'</div>');
+			totalRoomCosts += (room2_count*2000); 
 		}
-		feesHTML.push('<b>Entrance Fee - ' + (adultEntFee+childEntFee) +"</b>"); 
-		totalCosts += (adultEntFee+childEntFee);
-	}
+		totalRoomCosts *= dates.length;
 
+			// ROOM FEE HTML
+			$(".totalRoomCosts").html('<b>P'+totalRoomCosts.toLocaleString()+'</b>')
+			totalCosts += (totalRoomCosts);
 
-	// ADDITIONAL FEES APPEND
-	$(".addFee").html("");
-	if (feesHTML.length > 0) {
-		feesHTML.forEach((value,key)=>{
-			$(".addFee").append(value + "<br/>"); 
-		})
-	}else{
-		$(".addFee").html("No Additional Fees");
-	}
+			// IF EXCESSIVE PAX
+			if (totalRoomPax < totalUserPax) {  
+				feesHTML.push('<b>Add. Pax - P500</b>');
+				totalCosts += 500;
+			}
 
-	// ROOM APPEND
-	$(".roomsDiv").html(""); 
-	roomsHTML.forEach((value,key)=>{
-		$(".roomsDiv").append(value); 
-	})
+			// ENTRANCE FEE 
+			if (dates.length < 2) {
+				let adultEntFee = 0;
+				let childEntFee = 0;
 
-	// TAX COMPUTATION
-	let tax = parseInt($(".taxPercent").data('tax')); 
-	tax = (tax / 100)+1;
-	let totalTax = ((totalCosts / tax) - totalCosts)*(-1);
-	$(".taxFee").html('P'+ Math.round(totalTax).toLocaleString());
+				// IF DAY/NIGHT STAY 
+				if ($("#add_stayType").val() == 1) {
+					adultEntFee = adultCount * 80;
+					if (childCount > 0) { 
+						childEntFee = childCount * 50;
+					}
+				}else{
+					adultEntFee = adultCount * 100;
+					if (childCount > 0) { 
+						childEntFee = childCount * 70;
+					}
+				}
 
-	// TOTAL COSTS
-	$(".totalCosts").html('<b>'+"P" + totalCosts.toLocaleString()+'</b>');
+				feesHTML.push('Adult/s  ('+adultCount+') - P' + adultEntFee);
 
+				if (childCount > 0) {   
+					feesHTML.push('Child/ren  ('+childCount+') - P' + childEntFee );  
+				}
+				feesHTML.push('<b>Entrance Fee - ' + (adultEntFee+childEntFee) +"</b>"); 
+				totalCosts += (adultEntFee+childEntFee);
+			}
 
-	// AJAX = GUEST DETAILS VALIDATION
-	let add_firstname = $("#add_firstname").val();
-	let add_lastname = $("#add_lastname").val();
-	let add_gender = $("#add_gender").val();
-	let add_phone = $("#add_phone").val();
-	let add_email = $("#add_email").val();
-	let add_address = $("#add_address").val();
-	let add_request = $("#add_request").val();
-
-	$.ajax({
-		type:"POST",
-		dataType: "json",
-		url: base_url + "Moderator/guestValidation",
-		data:{
-			add_firstname,
-			add_lastname,
-			add_gender,
-			add_phone,
-			add_email,
-			add_address,
-			add_request
-		},
-		success:function (data) {
-			if(data != true){  
-				var size = Object.keys(data.error).length; 
-				Object.entries(data.error).forEach(([key, val]) => {    
-					M.toast({html: val})       
-				});
+			// ADDITIONAL FEES APPEND
+			$(".addFee").html("");
+			if (feesHTML.length > 0) {
+				feesHTML.forEach((value,key)=>{
+					$(".addFee").append(value + "<br/>"); 
+				})
 			}else{
-				$("#resGuestDetailsDiv").fadeOut('fast', function() {
-					$(this).css('display', 'none');
-					$("#summaryDiv").fadeIn('fast', function() {
-						$(this).css('display', 'block');
-					});
-				});
-			} 
-		}
-	});    
-});
+				$(".addFee").html("No Additional Fees");
+			}
+
+			// ROOM APPEND
+			$(".roomsDiv").html(""); 
+			roomsHTML.forEach((value,key)=>{
+				$(".roomsDiv").append(value); 
+			})
+
+			// TAX COMPUTATION
+			let tax = parseInt($(".taxPercent").data('tax')); 
+			tax = (tax / 100)+1;
+			let totalTax = ((totalCosts / tax) - totalCosts)*(-1);
+			$(".taxFee").html('P'+ Math.round(totalTax).toLocaleString());
+
+			// TOTAL COSTS
+			$(".totalCosts").html('<b>'+"P" + totalCosts.toLocaleString()+'</b>');
+
+				// AJAX = GUEST DETAILS VALIDATION
+				let add_firstname = $("#add_firstname").val();
+				let add_lastname = $("#add_lastname").val();
+				let add_gender = $("#add_gender").val();
+				let add_phone = $("#add_phone").val();
+				let add_email = $("#add_email").val();
+				let add_address = $("#add_address").val();
+				let add_request = $("#add_request").val();
+
+				$.ajax({
+					type:"POST",
+					dataType: "json",
+					url: base_url + "Moderator/guestValidation",
+					data:{
+						add_firstname,
+						add_lastname,
+						add_gender,
+						add_phone,
+						add_email,
+						add_address,
+						add_request
+					},
+					success:function (data) {
+						if(data != true){  
+							var size = Object.keys(data.error).length; 
+							Object.entries(data.error).forEach(([key, val]) => {    
+								M.toast({html: val})       
+							});
+						}else{
+							$("#resGuestDetailsDiv").fadeOut('fast', function() {
+								$(this).css('display', 'none');
+								$("#summaryDiv").fadeIn('fast', function() {
+									$(this).css('display', 'block');
+								});
+							});
+						} 
+					}
+				});    
+			});
 
 
 $(".btnSubmitReservation").click(function(event) {
@@ -384,14 +448,16 @@ $(".btnSubmitReservation").click(function(event) {
 				swal({
 					title: "TRANSACTION KEY: "+data[1],
 					text: "Get a pen and paper, take down this IMPORTANT transaction key. This will serve as your code to view, edit, and as well as pay your reservation.",
-					icon: "warning",
+					type: "warning",
 					buttons: "Proceed",
 					closeOnClickOutside: false, 
 				})
 				.then((willDelete) => {
-					if (willDelete) {
-						swal("Reservation sent", {
-							icon: "success",
+					if (willDelete.value) {
+						swal({
+							title: "RESERVATION ADDED",
+							type: "success",
+							text: 'Succesfully added reservation!',
 							closeOnClickOutside: false,
 						}).then(()=>{
 							location.reload();
@@ -422,12 +488,13 @@ $(".btnReturnGuestDes").click(function(event) {
 $(".btnReturnCalendar").click(function(event) {
 	swal({
 		title: "CANCEL RESEVATION?",
-		icon: 'error',
+		type: 'error',
 		dangerMode: true,
 		text: 'All unsaved data will not be recovered',
-		buttons: true,
+		reverseButtons: true, 
+		showCancelButton: true,
 	}).then((proceed)=>{ 
-		if (proceed) {
+		if (proceed.value) {
 			$("#divAddRes").fadeOut('fast', function() {
 				$(this).css('display', 'none');
 				$("#divCalendar").fadeIn('fast', function() {
@@ -438,6 +505,104 @@ $(".btnReturnCalendar").click(function(event) {
 	});
 });
 
+// ADD BILLS
+$(".btnAddBills").click(function(event) {  
+	$('#mdlViewResDetails').modal('close');
+});
+
+let counterAdd = 0;
+$(".btnAddMore").click(function(event) {
+	// addBillsContent
+	htmlAdd = '	<div class="row" id="divAddBill'+counterAdd+'">'+
+	'<div class="col s4 input-field">'+
+	'<input id="miscName'+counterAdd+'" name="miscName[]" placeholder="E.g Umbrella" type="text" class="validate">'+
+	'<label for="miscName'+counterAdd+'">Miscellaneous Name</label>'+
+	'</div>'+
+	'<div class="col s4 input-field">'+
+	'<input id="miscPrice'+counterAdd+'" name="miscPrice[]" placeholder="" type="text" class="validate">'+
+	'<label for="miscPrice'+counterAdd+'">Price</label>'+
+	'</div>'+
+	'<div class="col s3 input-field">'+
+	'<input id="miscQty'+counterAdd+'" name="miscQty[]" min="1" value="1" max="250" type="number" class="validate">'+
+	'<label for="miscQty'+counterAdd+'">Quantity</label>'+
+	'</div>'+
+	'<div class="col s1">'+
+	'<i class="material-icons red-text btnRemoveAddedBill" onclick="" data-id="'+counterAdd+'" style="cursor: pointer;">close</i>'+
+	'</div>'+
+	'</div>';
+	counterAdd++;
+	$("#addBillsContent").append(htmlAdd);
+});
+
+$(document).on("click", ".btnRemoveAddedBill", function(event) {  
+	let id = $(this).data('id'); 
+	$("#divAddBill"+id).remove();
+}); 
+
+$(".btnUpdateBilling").click(function(event) {
+	let isAllValid = true;
+	let rKey = $(this).data('key'); 
+	let miscName = $("input[name^=miscName]").map(function(idx, elem) {
+		return $(elem).val();
+	}).get();
+	let miscPrice = $("input[name^=miscPrice]").map(function(idx, elem) {
+		return $(elem).val();
+	}).get();
+	let miscQty = $("input[name^=miscQty]").map(function(idx, elem) {
+		return $(elem).val();
+	}).get(); 
+
+	miscName.forEach((data,key)=>{
+		if (data == "") {
+			M.toast({html: "Please fill out Miscellaneous Name on item #" + (key+1)});   
+			isAllValid = false;
+		}
+	});
+	miscPrice.forEach((data,key)=>{
+		if (data == "") {
+			M.toast({html: "Please fill out Miscellaneous Price on item #" + (key+1)});   
+			isAllValid = false;
+		}else if (isNaN(data)) {
+			M.toast({html: "Not a valid Miscellaneous Price on item #" + (key+1)});    
+			isAllValid = false;
+		}
+	}); 
+
+	if (isAllValid == true) {
+		$.ajax({
+			url: base_url + 'Moderator/addBilling',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				miscName,
+				miscPrice,
+				miscQty,
+				rKey
+			},
+			success: function(data){
+				if (data == true) {
+					swal({
+						title: 'SUCCESS',
+						text: 'Succesfully added billing/s',
+						type: 'success',
+						allowEscapeKey: false, 
+					}).then((result) => {
+						if (result.value) {
+							location.reload();
+						}
+					})
+				}else{
+					swal(
+						'ERROR',
+						data,
+						'error'
+						);
+				}
+			}
+		}); 
+	}
+
+});
 
 $(".btnAddModerator").click(function(event) {
 	let first_name = $("#first_name").val();
@@ -462,7 +627,7 @@ $(".btnAddModerator").click(function(event) {
 				swal({
 					title: 'Moderator has been added!',
 					text: 'Moderator has been added and has a default status of active',
-					icon: 'success',
+					type: 'success',
 					closeOnClickOutside: false,
 				}).then(()=>{
 					location.reload();
@@ -518,32 +683,35 @@ $(".btnAddModerator").click(function(event) {
 		swal({
 			title: 'APPROVE THIS RESERVATION?',
 			text: 'Once approved this status will no longer be changed',
-			buttons: true,
-			icon: 'info'
-		}).then((approve)=>{
-			$.ajax({
-				url: base_url + 'Moderator/approveReservation',
-				type: 'post',
-				dataType: 'json',
-				data: {rKey},
-				success: function(data){
-					console.log(data)
-					if (data == true) {
-						swal({
-							title: "RERVATION HASE BEEN APPROVED!",
-							icon: 'success'
-						}).then((reload)=>{ 
-							location.reload();
-						})
-					}else{
-						swal({
-							title: data[0],
-							icon: 'error',
-							text: data[1]
-						}) 
+			reverseButtons: true, 
+			showCancelButton: true,
+			type: 'info'
+		}).then((approve)=>{ 
+			if (approve.value) {
+				$.ajax({
+					url: base_url + 'Moderator/approveReservation',
+					type: 'post',
+					dataType: 'json',
+					data: {rKey},
+					success: function(data){
+						console.log(data)
+						if (data == true) {
+							swal({
+								title: "RERVATION HASE BEEN APPROVED!",
+								type: 'success'
+							}).then((reload)=>{ 
+								location.reload();
+							})
+						}else{
+							swal({
+								title: data[0],
+								type: 'error',
+								text: data[1]
+							}) 
+						}
 					}
-				}
-			});
+				});
+			}
 		});
 		
 	});
@@ -555,10 +723,11 @@ $(".btnAddModerator").click(function(event) {
 			title: 'DENY THIS RESERVATION?',
 			text: 'Once denied this status will no longer be changed',
 			dangerMode: true,
-			buttons: true,
-			icon: 'error'
+			reverseButtons: true, 
+			showCancelButton: true,
+			type: 'error'
 		}).then((deny)=>{
-			if (deny) {
+			if (deny.value) {
 				$.ajax({
 					url: base_url + 'Moderator/denyReservation',
 					type: 'post',
@@ -569,7 +738,7 @@ $(".btnAddModerator").click(function(event) {
 						if (data == true) {
 							swal({
 								title: "RERVATION DENIED!",
-								icon: 'success'
+								type: 'success'
 							}).then((reload)=>{ 
 								location.reload();
 							})

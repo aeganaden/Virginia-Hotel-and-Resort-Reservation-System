@@ -11,8 +11,8 @@
 		<div class="row">
 			<div class="col s6">
 				<ul class="tabs">
-					<li class="tab col s6 grey lighten-4 active"><a class=" blue-text text-darken-4 waves-effect"  href="#pendingReservations">Pending Reservations</a></li>
-					<li class="tab col s6 grey lighten-4 "><a class=" blue-text text-darken-4 waves-effect" href="#calendarView">Calendar</a></li> 
+					<li class="tab col s6 grey lighten-4 "><a class=" blue-text text-darken-4 waves-effect active" href="#calendarView">Calendar</a></li> 
+					<li class="tab col s6 grey lighten-4 "><a class=" blue-text text-darken-4 waves-effect "  href="#pendingReservations">Pending Reservations</a></li>
 				</ul>
 			</div>
 
@@ -321,79 +321,151 @@
 				</blockquote>
 				<div class="divider black"></div>
 				<br> 
-				<!-- CHECK IN & CHECK OUT DATE -->
 				<div class="row">
-					<div class="input-field col s6">
-						<i class="material-icons prefix">event</i> 
-						<input disabled value="" id="checkin" placeholder="Some Data" type="text" class="validate">
-						<label for="checkin"><span class="">Check In</span></label>
-					</div>
-					<div class="input-field col s6">
-						<i class="material-icons prefix">event</i>
-						<input disabled value="" id="checkout" placeholder="Some Data" type="text" class="validate">
-						<label for="checkout"><span class="">Check out</span></label>
-					</div>
-				</div>
-
-				<!-- LENGTH OF STAY AND STAY TYPE -->
-				<div class="row">
-					<div class="input-field col s6">
-						<i class="material-icons prefix">hourglass_empty</i>
-						<input disabled value=" Day/s" id="lengthStay" placeholder="Some Data" type="text" class="validate lengthStay">
-						<label for="lengthStay"><span class="">Length of Stay</span></label>
-					</div>
-					<div class="input-field col s6">
-						<i class="material-icons prefix">brightness_4</i>
-						<input disabled value="" id="stayType" placeholder="Some Data" type="text" class="validate">
-						<label for="stayType"><span class="">Stay Type</span></label>
-					</div>
-				</div>
-
-				<!-- GUEST COUNT -->
-				<div class="row">
-					<div class="input-field col s6">
-						<i class="material-icons prefix">face</i>
-						<input disabled value=" Adult/s" placeholder="Some Data" id="adultCount" type="text" class="validate adultCount">
-						<label for="adultCount"><span class="">Adult Count</span></label>
-					</div>
-					<div class="input-field col s6">
-						<i class="material-icons prefix">child_care</i>
-						<input disabled value=" Child/ren" placeholder="Some Data" id="childCount" type="text" class="validate childCount">
-						<label for="childCount"><span class="">Child Count</span></label>
-					</div>
-				</div>
-
-				<!-- ROOMS -->
-				<div class="row" id="roomType1" style="display: none;">
-					<div class="input-field col s6">
-						<i class="material-icons prefix">hotel</i>
-						<input id="roomType1_lbl" disabled placeholder="Some Data" value="" type="text" class="  validate">
-						<label for="roomType1_lbl" class="">Room Type</label>
-					</div>
-
-					<div class="input-field col s6">
-						<i class="material-icons prefix">border_clear</i>
-						<input id="roomType1_count" disabled placeholder="Some Data" value=" Bedroom" type="text" class="  validate">
-						<label for="roomType1_count" class="">Room Count</label>
+					<div class="col s6">
+						<div class="card blue darken-4">
+							<div class="card-content white-text">
+								<div class="row">
+									<div class="col s6">
+										<p class="valign-wrapper">
+											<i class="material-icons">event</i> | CHECK IN:
+										</p>
+									</div>
+									<div class="col s6">
+										<span class="right" id="checkin"></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col s6">
+										<p class="valign-wrapper">
+											<i class="material-icons">event_busy</i> | CHECK OUT:
+										</p>
+									</div>
+									<div class="col s6">
+										<span class="right" id="checkout"></span> 
+									</div>
+								</div>	
+								<div class="row">
+									<div class="col s6">
+										<p class="valign-wrapper">
+											<i class="material-icons">hourglass_empty</i> | STAY LENGTH:
+										</p>
+									</div>
+									<div class="col s6">
+										<span class="right" id="lengthStay"></span> 
+									</div>
+								</div>
+								<div class="row">
+									<div class="col s6">
+										<p class="valign-wrapper">
+											<i class="material-icons">brightness_4</i> | STAY TYPE:
+										</p>
+									</div>
+									<div class="col s6">
+										<span class="right" id="stayType"></span> 
+									</div>
+								</div>
+								<div class="row">  
+									<div class="col s6">
+										<p class="valign-wrapper">
+											<i class="material-icons">face</i> | ADULT/S:
+										</p>
+									</div>
+									<div class="col s6">
+										<span class="right" id="adultCount"></span> 
+									</div>
+								</div>
+								<div class="row">
+									<div class="col s6">
+										<p class="valign-wrapper">
+											<i class="material-icons">child_care</i> | CHILD/REN:
+										</p>
+									</div>
+									<div class="col s6">
+										<span class="right" id="childCount"></span> 
+									</div>
+								</div>
+								
+							</div>
+						</div>
 					</div> 
-				</div>
+					<div class="col s6">
+						<div class="card orange accent-3 black-text">
+							<div class="card-content">
+								<div class="row" id="roomType1" style="display: none"> 
+									<div class="col s6">
+										<p class="valign-wrapper">
+											<i class="material-icons prefix">hotel</i> | <span id="roomType1_lbl" ></span>:
+										</p>
+									</div>
+									<div class="col s6">
+										<span class="right" id="roomType1_count"></span> 
+									</div>
+								</div>
+								<div class="row" id="roomType2" style="display: none"> 
+									<div class="col s6">
+										<p class="valign-wrapper">
+											<i class="material-icons prefix">hotel</i> | <span id="roomType2_lbl" ></span>:
+										</p>
+									</div>
+									<div class="col s6">
+										<span class="right" id="roomType2_count"></span> 
+									</div>
+								</div>
+							</div>
+						</div>
 
-				<div class="row" id="roomType2" style="display: none;">
-					<div class="input-field col s6">
-						<i class="material-icons prefix">hotel</i>
-						<input id="roomType2_lbl" disabled placeholder="Some Data" value="" type="text" class="  validate">
-						<label for="roomType2_lbl" class="">Room Type</label>
+						<div class="card orange lighten-4">
+							<div class="card-content">
+								<blockquote>
+									<h6 class="black-text miscsTitle">MISCELLANEOUS</h6>
+									<div class="row" id="miscsDiv">
+										
+									</div>
+									<h5 class="black-text">TOTAL FEE: <span class="totalFee right"></span></h5>
+								</blockquote>
+							</div>
+						</div>
 					</div>
-
-					<div class="input-field col s6">
-						<i class="material-icons prefix">border_clear</i>
-						<input id="roomType2_count" disabled placeholder="Some Data" value=" Bedroom" type="text" class="  validate">
-						<label for="roomType2_count" class="">Room Count</label>
-					</div> 
-				</div>
-
+				</div>  
 			</div>
 			<div class="modal-footer grey lighten-5">
-				<a href="#!" class="modal-close waves-effect waves-green btn">CLOSE</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn left red"><i class="material-icons left">close</i>CLOSE</a>
+				<a href="#!" class="waves-effect waves-light btn orange accent-3 right btnCheckout"><i class="material-icons right">input</i>CHECKOUT</a>
+				<a href="#addBills" class="modal-trigger waves-effect waves-light btnAddBills btn blue right" style="margin-right: 3%;"><i class="material-icons right">add</i>ADD BILLS</a> 
+			</div>
+		</div>
+
+
+		<div id="addBills" class="modal">
+			<div class="modal-content">
+				<blockquote>
+					<h4 style="font-weight: 300">ADD BILLS - <span class="green-text titleKey"></span></h4>
+				</blockquote>
+				<div class="divider black"></div>
+				<br> 
+				<div class="row"  id="addBillsContent">
+					<div class="row">
+						<div class="col s4 input-field">
+							<input id="miscName" name="miscName[]" placeholder="E.g Umbrella" type="text" class="validate">
+							<label for="miscName">Miscellaneous Name</label>
+						</div>
+						<div class="col s4 input-field">
+							<input id="miscPrice" name="miscPrice[]" placeholder="" type="text" class="validate">
+							<label for="miscPrice">Price</label>
+						</div>
+						<div class="col s3 input-field">
+							<input id="miscQty" name="miscQty[]" min="1" value="1" max="250" type="number" class="validate">
+							<label for="miscQty">Quantity</label>
+						</div>
+						<div class="col s1"> 
+						</div>
+					</div>
+
+				</div>
+				<button class="btn waves-effect blue waves-light btnAddMore">ADD MORE</button>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="waves-effect waves-green btn orange accent-3 btnUpdateBilling" data-key="">ADD BILLS</a>
 			</div>
 		</div>
