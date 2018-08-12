@@ -518,10 +518,11 @@ $(document).ready(function() {
 		//src: https://stackoverflow.com/questions/15958671/disabled-fields-not-picked-up-by-serializearray/15958900
 		var myform = $('#fileUpload');
 		var disabled = myform.find(':input:disabled').removeAttr('disabled');
-		var serialized = myform.serializeArray();
+		var serialized = myform.serialize();
 		disabled.attr('disabled','disabled');
 
 		var rID = $('.btnPrintReceipt').data('id');
+		window.open("about:blank", "newPage");
 		$.ajax({
             url: base_url+'Payments/downloadPDF/'+rID, // point to server-side controller method
             dataType: 'json', // what to expect back from the server
@@ -529,6 +530,16 @@ $(document).ready(function() {
             type: 'post',
             success: function (data) {  
             	console.log(data)
+            	if(data == "error"){
+            		window.location.href = base_url;
+            	} else {
+            		// var newWindow = window.open("","_blank");
+            		// newWindow.location.href = data;
+
+            		window.open(data, "newPage");
+            	}
+            }, error: function(data) {
+            	alert('errorrrrrrr');
             }
         });
 	});
