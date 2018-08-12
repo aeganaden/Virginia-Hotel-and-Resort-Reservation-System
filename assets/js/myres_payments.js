@@ -528,13 +528,10 @@ $(document).ready(function() {
             	if(data == "error"){
             		window.location.href = base_url;
             	} else {
-            		// var newWindow = window.open("","_blank");
-            		// newWindow.location.href = data;
-
             		window.open(data, "newPage");
             	}
             }, error: function(data) {
-            	alert('errorrrrrrr');
+            	alert('There is an error while processing the PDF. Please refresh the webpage and try again.');
             }
         });
 	});
