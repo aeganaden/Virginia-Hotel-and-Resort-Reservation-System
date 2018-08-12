@@ -515,11 +515,6 @@ $(document).ready(function() {
 	//LAST --mark
 	$(".btnPrintReceipt").on('click', function(event) {
 		event.preventDefault();
-		//src: https://stackoverflow.com/questions/15958671/disabled-fields-not-picked-up-by-serializearray/15958900
-		var myform = $('#fileUpload');
-		var disabled = myform.find(':input:disabled').removeAttr('disabled');
-		var serialized = myform.serialize();
-		disabled.attr('disabled','disabled');
 
 		var rID = $('.btnPrintReceipt').data('id');
 		window.open("about:blank", "newPage");
