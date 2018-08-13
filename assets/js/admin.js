@@ -211,6 +211,74 @@ $(".btnProceedGuest").click(function(event) {
 	instance.select('guestDetails'); 
 });
 
+$("#chkAddRoom_0").change(function(event) {
+	var atLeastOneIsChecked = $('#chkAddRoom_0').is(':checked') ||  $('#chkAddRoom_1').is(':checked') ;
+	console.log(atLeastOneIsChecked)
+	if (atLeastOneIsChecked) {
+		if($(this).prop('checked')) {
+			$("#addRoom_0").removeAttr('disabled');
+			$("#addRoom_0").val(1);  
+		}else{
+			$("#addRoom_0").attr('disabled',true);
+			$("#addRoom_0").val(0);
+		}
+	}else{
+		$(this).prop("checked",true);
+		M.toast({html: 'Cannot diselect, must select atleast one room type'})
+	}
+
+});
+
+// ADD ROOMS BUTTON
+$(".btnSubmitRooms").click(function(event) {
+	let singleRoomCount = $("#addRoom_0").val(); 
+	let doubleRoomCount = $("#addRoom_1").val();
+
+	$.ajax({
+		url: base_url + 'Moderator/addRooms',
+		type: 'post',
+		dataType: 'json',
+		data: {
+			singleRoomCount,
+			doubleRoomCount
+		},
+		success: function(data){
+			if (data == true) {
+				swal({
+					title:'ROOMS ADDED',
+					type: 'success',
+					text: 'SUCCESSFULLY ADDED ROOMS',
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+				}).then((data)=>{
+					if (data.value) {
+						location.reload();
+					}
+				})
+			}
+		}
+	});
+
+});
+
+$("#chkAddRoom_1").change(function(event) { 
+	var atLeastOneIsChecked = $('#chkAddRoom_0').is(':checked') ||  $('#chkAddRoom_1').is(':checked') ;
+	if (atLeastOneIsChecked) {
+		if($(this).prop('checked')) {
+			$("#addRoom_1").removeAttr('disabled');
+			$("#addRoom_1").val(1); 
+		}else{
+			$("#addRoom_1").attr('disabled',true);
+			$("#addRoom_1").val(0);
+		}
+	}else{
+		$(this).prop("checked",true);
+		M.toast({html: 'Cannot diselect, must select atleast one room type'})
+	}
+
+});
+
+
 // CHECKOUT
 $(".btnCheckout").click(function(event) {
 	let rKey = $(this).data('key');
@@ -642,112 +710,141 @@ $(".btnAddModerator").click(function(event) {
 	});      
 });
 
-	// oncheck moderator status
-	$(".chk_moder_status").change(function (event) {
-		var value = $(this).prop("checked") ? 1 : 0;
-		var str_val = $(this).prop("checked") ? "ACTIVE" : "INACTIVE";
-		var id = $(this).data('id');
+// ONCHECK ROOM STATUS 
+$(".chkModifyRoomStatus").change(function (event) {
+	var value = $(this).prop("checked") ? 3 : 2;
+	var str_val = $(this).prop("checked") ? "VACANT" : "CLEANING";
+	var id = $(this).data('id');
 
-		$.ajax({
-			url: base_url+'Admin/updateStatus',
-			type: 'post',
-			dataType: 'json',
-			data: {
-				id,
-				value
-			},
-			success: function (data) {
-				$(".stat" + id).html(str_val);
-				if (value == 0) {
-					$(".stat" + id).removeClass('green-text');
-					$(".stat" + id).addClass('red-text');
-				} else {
-					$(".stat" + id).removeClass('red-text');
-					$(".stat" + id).addClass('green-text');
+	$.ajax({
+		url: base_url+'Moderator/updateRoomStatus',
+		type: 'post',
+		dataType: 'json',
+		data: {
+			id,
+			value
+		},
+		success: function (data) {
+			$(".roomstat" + id).html(str_val);
+			if (value == 2) {
+				$(".roomstat" + id).removeClass('green-text');
+				$(".roomstat" + id).addClass('orange-text text-accent-3');
+			} else {
+				$(".roomstat" + id).removeClass('orange-text text-accent-3');
+				$(".roomstat" + id).addClass('green-text');
+			}
+
+			M.toast({html: '<span>Room Status Updated</span>'})       
+
+		}
+	});
+});
+// oncheck moderator status
+$(".chk_moder_status").change(function (event) {
+	var value = $(this).prop("checked") ? 1 : 0;
+	var str_val = $(this).prop("checked") ? "ACTIVE" : "INACTIVE";
+	var id = $(this).data('id');
+
+	$.ajax({
+		url: base_url+'Admin/updateStatus',
+		type: 'post',
+		dataType: 'json',
+		data: {
+			id,
+			value
+		},
+		success: function (data) {
+			$(".stat" + id).html(str_val);
+			if (value == 0) {
+				$(".stat" + id).removeClass('green-text');
+				$(".stat" + id).addClass('red-text');
+			} else {
+				$(".stat" + id).removeClass('red-text');
+				$(".stat" + id).addClass('green-text');
+			}
+
+			M.toast({html: '<span>Moderator Status Updated</span>'})       
+
+		}
+	});
+});
+
+$(".btnViewImage").click(function(event) { 
+	let src = $(this).attr('data-src');
+	$("#imgContainer").attr('src', src);
+});
+
+$(".btnApproveRes").click(function(event) {
+	let rKey = $(this).data('id');
+
+	swal({
+		title: 'APPROVE THIS RESERVATION?',
+		text: 'Once approved this status will no longer be changed',
+		reverseButtons: true, 
+		showCancelButton: true,
+		type: 'info'
+	}).then((approve)=>{ 
+		if (approve.value) {
+			$.ajax({
+				url: base_url + 'Moderator/approveReservation',
+				type: 'post',
+				dataType: 'json',
+				data: {rKey},
+				success: function(data){
+					console.log(data)
+					if (data == true) {
+						swal({
+							title: "RERVATION HASE BEEN APPROVED!",
+							type: 'success'
+						}).then((reload)=>{ 
+							location.reload();
+						})
+					}else{
+						swal({
+							title: data[0],
+							type: 'error',
+							text: data[1]
+						}) 
+					}
 				}
-
-				M.toast({html: '<span>Moderator Status Updated</span>'})       
-
-			}
-		});
+			});
+		}
 	});
 
-	$(".btnViewImage").click(function(event) { 
-		let src = $(this).attr('data-src');
-		$("#imgContainer").attr('src', src);
-	});
+});
 
-	$(".btnApproveRes").click(function(event) {
-		let rKey = $(this).data('id');
-		
-		swal({
-			title: 'APPROVE THIS RESERVATION?',
-			text: 'Once approved this status will no longer be changed',
-			reverseButtons: true, 
-			showCancelButton: true,
-			type: 'info'
-		}).then((approve)=>{ 
-			if (approve.value) {
-				$.ajax({
-					url: base_url + 'Moderator/approveReservation',
-					type: 'post',
-					dataType: 'json',
-					data: {rKey},
-					success: function(data){
-						console.log(data)
-						if (data == true) {
-							swal({
-								title: "RERVATION HASE BEEN APPROVED!",
-								type: 'success'
-							}).then((reload)=>{ 
-								location.reload();
-							})
-						}else{
-							swal({
-								title: data[0],
-								type: 'error',
-								text: data[1]
-							}) 
-						}
+$(".btnDenyRes").click(function(event) {
+	let rKey = $(this).data('id');
+
+	swal({
+		title: 'DENY THIS RESERVATION?',
+		text: 'Once denied this status will no longer be changed',
+		dangerMode: true,
+		reverseButtons: true, 
+		showCancelButton: true,
+		type: 'error'
+	}).then((deny)=>{
+		if (deny.value) {
+			$.ajax({
+				url: base_url + 'Moderator/denyReservation',
+				type: 'post',
+				dataType: 'json',
+				data: {rKey},
+				success: function(data){
+					console.log(data)
+					if (data == true) {
+						swal({
+							title: "RERVATION DENIED!",
+							type: 'success'
+						}).then((reload)=>{ 
+							location.reload();
+						})
 					}
-				});
-			}
-		});
-		
+				}
+			});
+		}
 	});
-
-	$(".btnDenyRes").click(function(event) {
-		let rKey = $(this).data('id');
-
-		swal({
-			title: 'DENY THIS RESERVATION?',
-			text: 'Once denied this status will no longer be changed',
-			dangerMode: true,
-			reverseButtons: true, 
-			showCancelButton: true,
-			type: 'error'
-		}).then((deny)=>{
-			if (deny.value) {
-				$.ajax({
-					url: base_url + 'Moderator/denyReservation',
-					type: 'post',
-					dataType: 'json',
-					data: {rKey},
-					success: function(data){
-						console.log(data)
-						if (data == true) {
-							swal({
-								title: "RERVATION DENIED!",
-								type: 'success'
-							}).then((reload)=>{ 
-								location.reload();
-							})
-						}
-					}
-				});
-			}
-		});
-	});
+});
 
 
 

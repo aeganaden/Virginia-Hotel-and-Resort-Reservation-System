@@ -6,7 +6,7 @@
 		<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 		<ul class="right hide-on-med-and-down">
 			<li><a href="<?=base_url()?>Moderator">Reservations<i class="material-icons left">event_note</i></a></li>  
-			<li><a href="<?=base_url()?>Moderator">Modify Room<i class="material-icons left">meeting_room</i></a></li>  
+			<li><a href="<?=base_url()?>Moderator/modifyRooms">Modify Room<i class="material-icons left">meeting_room</i></a></li>  
 			<li><a href="<?=base_url()?>Moderator/logout">Log out <i class="material-icons left">arrow_back</i></a></li> 
 		</ul>
 	</div>

@@ -32,12 +32,70 @@ class Moderator extends CI_Controller {
 
 	}
 
+	public function modifyRooms()
+	{
+		$moderData = $this->session->userdata('moderdata'); 
+		if (!$moderData) {
+			$title = "Moderator - Login";
+			$this->load->view('includes/materialize/header',compact('title'));
+			$this->load->view('moderator/login'); 
+			$this->load->view('includes/materialize/footer');
+		}else{
+			$title = "Moderator - Modify Rooms";
+			$this->load->view('includes/materialize/header',compact('title','moderData'));
+			$this->load->view('moderator/modifyRooms'); 
+			$this->load->view('includes/materialize/footer');
+		}
+	}
+
+	public function addRooms()
+	{
+		$singleRoomCount = $this->input->post('singleRoomCount');
+		$doubleRoomCount = $this->input->post('doubleRoomCount');
+		// Last single bedroom
+		$lastSR = $this->Crud->fetch_last('room', 'room_id', array('room_type_id'=>1));
+		$lastDR = $this->Crud->fetch_last('room', 'room_id', array('room_type_id'=>2));
+
+		for ($i=1; $i <= $singleRoomCount; $i++) {  
+			$dataSR = array(
+				'room_name'=> ++$lastSR->room_name,
+				'room_status'=>3,
+				'room_type_id'=>1,
+				'reservation_key'=>""
+			);
+			$this->Crud->insert('room',$dataSR); 
+		}	
+		for ($i=1; $i <= $doubleRoomCount; $i++) {  
+			$dataSR = array(
+				'room_name'=> ++$lastDR->room_name,
+				'room_status'=>3,
+				'room_type_id'=>2,
+				'reservation_key'=>""
+			);
+			$this->Crud->insert('room',$dataSR); 
+		}
+
+		echo json_encode(true);
+
+	}
+
+	public function updateRoomStatus()
+	{ 
+		$id = $this->input->post("id");
+		$val = $this->input->post("value");
+		if ($this->Crud->update("room", array("room_status" => $val), array("room_id" => $id))) {
+			echo json_encode("true");
+		} 
+	}
+
 	public function checkout()
 	{
 		$rKey = $this->input->post('rKey');
 
 		if ($this->Crud->update('reservation',array('reservation_status'=>5),array('reservation_key'=>$rKey))) {
-			echo json_encode(true);
+			if ($this->Crud->update('room',array('room_status'=>3,'reservation_key'=>NULL),array('reservation_key'=>$rKey))) {
+				echo json_encode(true);
+			}
 		}else{
 			echo json_encode("Failed to update reservation");
 		}
