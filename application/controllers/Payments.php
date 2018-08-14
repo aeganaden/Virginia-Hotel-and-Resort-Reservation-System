@@ -205,7 +205,9 @@ class Payments extends CI_Controller {
 
 			// send the captured HTML from the output buffer to the mPDF class for processing
 			$mpdf->WriteHTML($html);
-			unlink('assets/uploads/pdfs/pdf_'.$id.'.pdf');
+			if (file_exists('assets/uploads/pdfs/pdf_'.$id.'.pdf')){
+				unlink('assets/uploads/pdfs/pdf_'.$id.'.pdf');
+			}
 			$mpdf->Output('assets/uploads/pdfs/pdf_'.$id.'.pdf');
 			echo json_encode(base_url().'assets/uploads/pdfs/pdf_'.$id.'.pdf');
 		} else {

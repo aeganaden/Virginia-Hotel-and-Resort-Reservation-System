@@ -32,6 +32,24 @@ class Moderator extends CI_Controller {
 
 	}
 
+	public function loadDescription()
+	{
+		$id = $this->input->post('roomID');
+		$rooms = $this->Crud->fetch('room_type',array('room_type_id'=>$id));
+
+		echo json_encode($rooms[0]);
+	}
+
+	public function updateDesc()
+	{
+		$id = $this->input->post('roomID');
+		$value = $this->input->post('roomDescription');
+
+		if ($this->Crud->update('room_type',array('room_type_description'=>$value),array("room_type_id"=>$id))) {
+			echo json_encode(true);
+		}
+	} 
+
 	public function modifyRooms()
 	{
 		$moderData = $this->session->userdata('moderdata'); 

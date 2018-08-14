@@ -520,8 +520,7 @@ $(document).ready(function() {
 		window.open("about:blank", "newPage");
 		$.ajax({
             url: base_url+'Payments/downloadPDF/'+rID, // point to server-side controller method
-            dataType: 'json', // what to expect back from the server
-            data: serialized,
+            dataType: 'json', // what to expect back from the server 
             type: 'post',
             success: function (data) {  
             	console.log(data)

@@ -11,8 +11,19 @@
 		</blockquote>
 		<div class="col s6">
 			<ul class="tabs">
-				<li class="tab col s6 grey lighten-4 "><a class=" blue-text text-darken-4 waves-effect active" href="#singleRoomDiv">Single Bedroom</a></li> 
-				<li class="tab col s6 grey lighten-4 "><a class=" blue-text text-darken-4 waves-effect "  href="#doubleRoomDiv">Double Bedroom</a></li>
+				<li class="tab col s6 grey lighten-4"> 
+					<a class=" blue-text text-darken-4 waves-effect active " href="#singleRoomDiv">
+						<i class="material-icons right circle blue darken-4 white-text hoverable btnEditSingleRoom modal-trigger" href="#mdlRoomDesc" style="padding: 1%; margin-top: 2%;">edit</i>
+						Single Bedroom
+					</a>
+				</li> 
+				<li class="tab col s6 grey lighten-4 ">
+					<a class=" blue-text text-darken-4 waves-effect "  href="#doubleRoomDiv">
+						<i class="material-icons right circle blue darken-4 white-text hoverable btnEditDoubleRoom modal-trigger" href="#mdlRoomDesc" style="padding: 1%; margin-top: 2%;">edit</i> 	
+						Double Bedroom
+					</a>
+				</li>
+
 			</ul> 
 		</div>
 		<div id="singleRoomDiv" class=" col s12">
@@ -161,5 +172,29 @@
 	<div class="modal-footer">
 		<a href="#!" class="modal-close waves-effect waves-light btn red left">cancel <i class="material-icons right">close</i></a>
 		<a href="#!" class="waves-effect waves-light btn green btnSubmitRooms">ADD ROOMS <i class="material-icons right">add</i></a>
+	</div>
+</div>
+
+<div id="mdlRoomDesc" class="modal">
+	<div class="modal-content">
+		<blockquote>
+			<h4 style="font-weight: 300" class="roomDescTitle">ADD ROOMS</h4>
+		</blockquote>
+
+
+		<div class="row">
+			<form class="col s12">
+				<div class="row">
+					<div class="input-field col s12">
+						<textarea id="roomDescription" class="materialize-textarea"></textarea>
+						<label for="roomDescription">Room Description</label>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class=" waves-effect waves-light btn blue darken-4 btnUpdateDesc" data-id="0">UPDATE</a>
+		<a href="#!" class="modal-close waves-effect left waves-light btn red">CANCEL <i class="material-icons right">close</i></a>
 	</div>
 </div>

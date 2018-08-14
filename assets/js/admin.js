@@ -206,6 +206,78 @@ $(document).ready(function() {
 			});
 		}, 
 	}); 
+
+
+$(".btnEditSingleRoom").click(function(event) {
+	let roomID = 1;
+	$(".roomDescTitle").html('Single Bedroom Description');
+	$.ajax({
+		url: base_url + 'Moderator/loadDescription',
+		type: 'POST',
+		dataType: 'json',
+		data: {
+			roomID
+		},
+		success: function(data){
+			$("#roomDescription").val(data.room_type_description);
+			$(".btnUpdateDesc").attr('data-id',roomID);
+			$("#roomDescription").focus();
+			M.textareaAutoResize($('#roomDescription'));
+		}
+	});
+	
+});
+
+$(".btnEditDoubleRoom").click(function(event) { 
+	let roomID = 2; 
+	$(".roomDescTitle").html('Double Bedroom Description');
+	$.ajax({
+		url: base_url + 'Moderator/loadDescription',
+		type: 'POST',
+		dataType: 'json',
+		data: {
+			roomID
+		},
+		success: function(data){
+			$("#roomDescription").val(data.room_type_description);
+			$(".btnUpdateDesc").attr('data-id',roomID);
+			$("#roomDescription").focus(); 
+			M.textareaAutoResize($('#roomDescription'));
+		}
+	});
+});
+
+$(".btnUpdateDesc").click(function(event) {
+	let roomID = $(this).attr('data-id');
+	let roomDescription = $("#roomDescription").val()
+
+	$.ajax({
+		url: base_url + 'Moderator/updateDesc',
+		type: 'post',
+		dataType: 'json',
+		data: {
+			roomID,
+			roomDescription
+		},
+		success: function(data){
+			if (data == true) {
+				swal({
+					title: "SUCCESFULLY UPDATED",
+					type: 'success',
+					text: 'Succesfully updated room description',
+					closeOnClickOutside: false
+				}).then((reload)=>{
+					if (reload.value) {
+						location.reload();
+					}
+				});
+			}
+		}
+	});
+
+});
+
+
 $(".btnProceedGuest").click(function(event) {
 	var instance = M.Tabs.getInstance(document.getElementById('addReservationTab'));
 	instance.select('guestDetails'); 
