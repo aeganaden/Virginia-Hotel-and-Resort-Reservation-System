@@ -30,6 +30,31 @@ class Admin extends CI_Controller {
 		}
 	}
 
+	public function fetchGuest()
+	{
+		$guestID = $this->input->post('guestID');
+		$data = array('guest_id' => $guestID, );
+
+		$guest = $this->Crud->fetch('guest',$data);
+
+		echo json_encode($guest[0]);
+
+	}
+
+	public function loadReports()
+	{
+		$reports = $this->Crud->fetch_distinct('reservation');
+
+		foreach ($reports as $key => $value) {
+			$billing = $this->Crud->getSum('billing','billing_price', array('reservation_key'=>$value->reservation_key));
+			$value->billing_price = $billing[0]->billing_price;
+			$value->date_in_formatted = date('M d, Y',$value->reservation_in);
+			$value->date_out_formatted = date('M d, Y',$value->reservation_out);
+		}
+
+		echo json_encode($reports);
+	}
+
 	public function moderators()
 	{
 		$userData = $this->session->userdata('userdata');

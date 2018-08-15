@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	$('.datatable').DataTable(); 
+	loadReports();
 	const Calendar = document.querySelectorAll('.datepicker'); 
 
 	let  from_date = "";  
@@ -74,9 +75,154 @@ $(document).ready(function() {
 	});
 	
 	/*=====  End of SETTING OF DATA - ONCHANGE  ======*/
+
+	$(".btnShowGuestDetails").click(function(event) {
+		let guestID = $(this).data('id');
+		$.ajax({
+			url: base_url+'Admin/fetchGuest',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				guestID
+			},
+			success: function(data){
+				$("#mdlFirstname").val(data.guest_firstname)
+				$("#mdlLastname").val(data.guest_lastname)
+				$("#mdlGender").val(data.guest_gender)
+				$("#mdlPhone").val(data.guest_phone)
+				$("#mdlAddress").val(data.guest_address)
+				$("#mdlEmail").val(data.guest_email)
+			}
+		});
+		
+	});
 	
+	/*=================================
+	=            CHARTS JS            =
+	=================================*/
+	
+	function loadReports(argument) {
+		$.ajax({
+			url: base_url + 'Admin/loadReports',
+			type: 'POST',
+			dataType: 'json',
+			success: function(data){
+				console.log(data)
+				// GET WEEK DAYS
+				var startOfWeek = moment().startOf('isoWeek');
+				var endOfWeek = moment().endOf('isoWeek');
+
+				// GET MONTH
+				var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+				var firstDay = new Date(y, m, 1);
+				var lastDay = new Date(y, m + 1, 0);
+
+				firstDay = moment(firstDay);
+				lastDay = moment(lastDay);
 
 
+				// DAILY CHART
+				let dailyData = [];
+				let weeklyData = [];
+				let weeklyLabel = [];
+				let monthlyData = [];
+				let monthlyLabel = [];
+				let totalDaily = 0; 
+				// GET DAILY REPORTS
+				for (var i = 0; i < data.length ; i++) {
+					let checkin = moment(data[i].date_in_formatted);
+					// DAYS
+					if (checkin.diff(moment().format('MMM dd, YYYY')) != 0) {
+						totalDaily += parseInt(data[i].billing_price); 
+					}
+					// WEEK
+					if(moment(checkin).isBetween(startOfWeek, endOfWeek)){
+						weeklyData.push(parseInt(data[i].billing_price));
+						weeklyLabel.push(data[i].date_in_formatted);
+					}
+					// MONTH
+					if(moment(checkin).isBetween(firstDay, lastDay)){
+						monthlyData.push(parseInt(data[i].billing_price));
+						monthlyLabel.push(data[i].date_in_formatted);
+					}
+				}
+				dailyData.push(totalDaily); 
+
+				var daily = document.getElementById("dailyReport").getContext('2d');
+				var weekly = document.getElementById("weeklyReport").getContext('2d');
+				var monthly = document.getElementById("monthlyReport").getContext('2d');
+				var DailyChart = new Chart(daily, {
+					type: 'bar',
+					data: {
+						labels: ["Today's Sale"],
+						datasets: [{
+							label: 'Total Income',
+							data: dailyData,
+							backgroundColor: [
+							'rgba(255, 99, 132, 0.2)' 
+							],
+							borderColor: [
+							'rgba(255,99,132,1)', 
+							],
+							borderWidth: 1
+						}]
+					},
+					options: {
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero:true
+								}
+							}]
+						}
+					}
+				});
+				var WeeklyChart = new Chart(weekly, {
+					type: 'bar',
+					data: {
+						labels: weeklyLabel,
+						datasets: [{
+							label: 'Weekly Income',
+							data: weeklyData, 
+						}]
+					},
+					options: {
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero:true
+								}
+							}]
+						}
+					}
+				});
+
+				var MonthlyChart = new Chart(monthly, {
+					type: 'bar',
+					data: {
+						labels: monthlyLabel,
+						datasets: [{
+							label: 'monthly Income',
+							data: monthlyData, 
+						}]
+					},
+					options: {
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero:true
+								}
+							}]
+						}
+					}
+				});
+			}
+		});
+		
+	}
+	
+	/*=====  End of CHARTS JS  ======*/
+	
 
 	$('#calendar').fullCalendar({
 		defaultView: 'month',

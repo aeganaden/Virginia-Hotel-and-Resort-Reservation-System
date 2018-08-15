@@ -2,7 +2,7 @@
 	<div class="row valign-wrapper">
 		<div class="col s4"></div>
 		<div class="col s4"> 
-			<div class="card teal lighten-5" style="margin-top: 40%;">
+			<div class="card blue lighten-5" style="margin-top: 40%;">
 				<div class="card-content grey-text text-darken-4">
 					<span class="card-title center">MODERATOR LOGIN</span>
 					<div class="divider black">	</div>
