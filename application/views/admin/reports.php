@@ -19,9 +19,9 @@
 			<div id="reservation" class="col s12">
 
 				<?php 
-
-				$reservations = $this->Crud->fetch_distinct('reservation'); 
-
+				// @changes - already included
+				$reservations = $this->Crud->fetch_distinct('reservation',array('reservation_status !='=>4)); 
+				// @emdchanges
 				?>
 				<table class="datatable">
 					<thead>
@@ -94,7 +94,7 @@
 					
 				</div> 
 			</div>
-		</div>/
+		</div>
 		<div class="col s2"></div>
 	</div>
 

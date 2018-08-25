@@ -91,25 +91,28 @@
 												$room_type = $this->Crud->fetch('room_type',array("room_type_id"=>$value->room_type_id));
 												$room_type = $room_type[0];
 												?>
-												<div class="row">
-													<div class="input-field col s4">
-														<i class="material-icons prefix">hotel</i>
-														<input id="icon_prefix" disabled value="<?=$room_type->room_type_name?>" type="text" name="room_type" class=" white-text validate">
-														<label for="icon_prefix" class="white-text">Room Type</label>
-													</div>
+												<?php if ($reservation[$key]->reservation_roomCount >0 ): ?>
+													<div class="row">
+														<div class="input-field col s4">
+															<i class="material-icons prefix">hotel</i>
+															<input id="icon_prefix" disabled value="<?=$room_type->room_type_name?>" type="text" name="room_type" class=" white-text validate">
+															<label for="icon_prefix" class="white-text">Room Type</label>
+														</div>
 
-													<div class="input-field col s4">
-														<i class="material-icons prefix">border_clear</i>
-														<input id="icon_prefix" disabled value="<?=$reservation[0]->reservation_roomCount?> Bedroom" type="text" class=" white-text validate">
-														<label for="icon_prefix" class="white-text">Room Count</label>
-													</div>
+														
+														<div class="input-field col s4">
+															<i class="material-icons prefix">border_clear</i>
+															<input id="icon_prefix" disabled value="<?=$reservation[$key]->reservation_roomCount?> Bedroom" type="text" class=" white-text validate">
+															<label for="icon_prefix" class="white-text">Room Count</label>
+														</div>
 
-													<div class="input-field col s4">
-														<i class="material-icons prefix">monetization_on</i>
-														<input id="icon_prefix" disabled value="P<?=number_format($room_type->room_type_price)?>" type="text" class=" white-text validate" name="room_price">
-														<label for="icon_prefix" class="white-text">Room Price</label>
+														<div class="input-field col s4">
+															<i class="material-icons prefix">monetization_on</i>
+															<input id="icon_prefix" disabled value="P<?=number_format($room_type->room_type_price)?>" type="text" class=" white-text validate" name="room_price">
+															<label for="icon_prefix" class="white-text">Room Price</label>
+														</div>
 													</div>
-												</div>
+												<?php endif ?>
 											<?php endforeach ?>
 											<?php 
 											$billing = $this->Crud->fetch('billing' , array('reservation_key' => $reservation[0]->reservation_key ));

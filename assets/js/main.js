@@ -1,4 +1,16 @@
+ function isNumber(evt) {
+  evt = (evt) ? evt : window.event;
+  var charCode = (evt.which) ? evt.which : evt.keyCode;
+  if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+    return false;
+  }
+}
+
+
+
 $(document).ready(function() {
+
+
 
   /*==================================
   =            General JS            =
@@ -38,6 +50,28 @@ $(document).ready(function() {
   }
 
 
+
+  $('.name').keydown(function (e) {
+
+    if (e.shiftKey || e.ctrlKey || e.altKey) {
+
+      e.preventDefault();
+      
+    } else {
+
+      var key = e.keyCode;
+      
+      if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
+
+        e.preventDefault();
+        
+      }
+
+    }
+    
+  });
+
+
   // ANIMATE CSS CALLBACK FUNCTION
   $.fn.extend({
     animateCss: function(animationName, callback) {
@@ -71,15 +105,40 @@ $(document).ready(function() {
    returnButton(step);
  });
 
-  $('.datepicker').datepicker({
-    autoclose: 'true',
-    startDate: 'dateToday',
-    todayHighlight: 'true',    
-  });
+// @changes - already includedd
+$('.startDate').datepicker({
+  autoclose: 'true',
+  startDate: 'dateToday',
+  todayHighlight: 'true',    
+});
 
+$(".endDate").datepicker({
+ autoclose: 'true',
+ startDate: 'dateToday',    
+ endDate: '+1y'
+})
+$("#mobileNumber").on('input', function(event) { 
+  let value = $(this).val();  
+  if (value.length > 11) { 
+    $(this).val("")
+    showError_R("Phone numbers must be exactly 11 digits")
+  }else{ 
+    hideError_R();
+  }
+});
 
-  
-  /*=====  End of General JS  ======*/
+$("#inputAdult, #inputChild").on('input', function(event) { 
+  let value = $(this).val(); 
+  if (parseInt(value) > 31) {
+    $(this).val(30);
+    showError_R("Maximmum person is 30")
+  }else{ 
+    hideError_R();
+  }
+});
+// @endchanges
+
+/*=====  End of General JS  ======*/
 
 
 
@@ -597,7 +656,7 @@ $(".btnProceed").click(function(event) {
   }
 });
 
-/*=====  End of Proceed Button  ======*/
+ /*=====  End of Proceed Button  ======*/
 
 
 /*===================================

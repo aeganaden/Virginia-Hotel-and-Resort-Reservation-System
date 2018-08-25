@@ -111,7 +111,7 @@ class Moderator extends CI_Controller {
 		$rKey = $this->input->post('rKey');
 
 		if ($this->Crud->update('reservation',array('reservation_status'=>5),array('reservation_key'=>$rKey))) {
-			if ($this->Crud->update('room',array('room_status'=>3,'reservation_key'=>NULL),array('reservation_key'=>$rKey))) {
+			if ($this->Crud->update('room',array('room_status'=>3,'reservation_key'=>""),array('reservation_key'=>$rKey))) {
 				echo json_encode(true);
 			}
 		}else{

@@ -212,19 +212,20 @@
 					</div>
 					<div class="input-group-addon"></div>
 				</div>
-
+				<!-- @changes - already included -->
 				<div class="col-md-2">
 					<label >Adult:</label>
-					<input id="inputAdult" type="number" class="form-control" onkeydown="return false"  min="0" value="0" required>
+					<input id="inputAdult" type="number" class="form-control" onkeypress="return isNumber(event)"  min="0" value="0" required>
 				</div>
 				<div class="col-md-2">
 					<label  >Children:</label>
-					<input id="inputChild" type="number" class="form-control" onkeydown="return false"  min="0" value="0" required>
+					<input id="inputChild" type="number" class="form-control" onkeypress="return isNumber(event)"  min="0" value="0" required>
 				</div>
 				<div class="col-md-2">  
 					<br> 
 					<button class="btn btn-primary btn-block btnProceed" date-step="2">Proceed</button> 
 				</div>
+				<!-- @endchanges -->
 			</div>
 		</div>
 	</div> 
@@ -337,12 +338,12 @@ $tax = $settings ? $settings[0]->settings_tax : 10;
 				<div class="col-lg-12 col-sm-12 col-xs-12">
 					<div class="form-group">
 						<label for="firstName"  class="control-label">First Name <span class="required">*</span></label>
-						<input type="text"  name="fName" maxlength="40" value="" class="form-control" id="firstName" placeholder="Firstname" required>
+						<input type="text"  name="fName" maxlength="40"  value="" class="name form-control" id="firstName" placeholder="Firstname" required>
 					</div>
 
 					<div class="form-group">
 						<label for="lastName"class="control-label">Last Name <span class="required">*</span></label>
-						<input type="text" name="lName" maxlength="40" value="" class="form-control" id="lastName" placeholder="Lastname" required>
+						<input type="text" name="lName" maxlength="40"  value="" class="name form-control" id="lastName" placeholder="Lastname" required>
 					</div>
 					<div class="form-group">
 						<label for="gender" name="gender" class="control-label">Gender <span class="required">*</span></label>
