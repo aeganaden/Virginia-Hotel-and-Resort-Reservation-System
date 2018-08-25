@@ -57,8 +57,10 @@
 	<div> <!-- body -->
 		<div class="body_head">
 			<div style="margin-top: 25px;"></div>
-			<span style='font-weight:bold;'>PAYMENTS </span><?= $reservation[0]->reservation_payment_status != 0 ? "- <span style='color:#2ecc71;'>SUBMITTED</span>" : "";  ?><br>
-			<span style='font-weight:bold;'>TRANSACTION - </span><span style='color:#3498db;'><?= $id ?></span>
+			<span style='font-weight:bold;'>NAME - </span><span style='font-weight:normal;'><?=$fullname?></span><br>
+			<span style='font-weight:bold;'>E-MAIL - </span><span style='font-weight:normal;'><?=$email?></span><br><br>
+			<span style='font-weight:bold;'>PAYMENTS </span><?=$reservation[0]->reservation_payment_status != 0 ? "- <span style='color:#2ecc71;'>SUBMITTED</span>" : "";?><br>
+			<span style='font-weight:bold;'>TRANSACTION - </span><span style='color:#3498db;'><?=$id?></span>
 		</div>
 		<div class="body_body">
 			<div class="center summary">
@@ -70,23 +72,23 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<strong>Check Out:</strong> <?=date('M d, Y - h:i A', $reservation[0]->reservation_out)?>
 				<div style="margin-top: 5px;"></div>
-				<strong>Length of Stay:</strong> <?=$difference->d+1?> Day/s
+				<strong>Length of Stay:</strong> <?=$difference->d + 1?> Day/s
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<strong>Stay Type:</strong> <?=$stay_type?>
 				<div style="margin-top: 5px;"></div>
 				<?php foreach ($reservation as $key => $value): ?>
 					<?php
-					$room_type = $this->Crud->fetch('room_type',array("room_type_id"=>$value->room_type_id));
-					$room_type = $room_type[0];
-					?>
+$room_type = $this->Crud->fetch('room_type', array("room_type_id" => $value->room_type_id));
+$room_type = $room_type[0];
+?>
 					<strong>Room Type:</strong> <?=$room_type->room_type_name?>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<strong>Room Count:</strong> <?=$reservation[0]->reservation_roomCount?> Bedroom
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<strong>Room Price:</strong> P<?=number_format($room_type->room_type_price)?>
 					<div style="margin-top: 5px;"></div>
-				<?php endforeach ?>
+				<?php endforeach?>
 			</div>
 			<div style="margin-top: 20px;"></div>
 			<div style="margin-left: 500px; font-size: 20px;">
