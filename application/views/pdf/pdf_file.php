@@ -82,12 +82,14 @@
 $room_type = $this->Crud->fetch('room_type', array("room_type_id" => $value->room_type_id));
 $room_type = $room_type[0];
 ?>
-					<strong>Room Type:</strong> <?=$room_type->room_type_name?>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<strong>Room Count:</strong> <?=$reservation[0]->reservation_roomCount?> Bedroom
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<strong>Room Price:</strong> P<?=number_format($room_type->room_type_price)?>
-					<div style="margin-top: 5px;"></div>
+					<?php if ($reservation[$key]->reservation_roomCount > 0): ?>
+						<strong>Room Type:</strong> <?=$room_type->room_type_name?>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<strong>Room Count:</strong> <?=$reservation[$key]->reservation_roomCount?> Bedroom
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<strong>Room Price:</strong> P<?=number_format($room_type->room_type_price)?>
+						<div style="margin-top: 5px;"></div>
+					<?php endif;?>
 				<?php endforeach?>
 			</div>
 			<div style="margin-top: 20px;"></div>
