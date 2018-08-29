@@ -162,7 +162,7 @@ class Payments extends CI_Controller {
 				}
 				$billing_total = $billing_total + $billing_total_negative;
 				$tax = $this->Crud->fetch('settings', array('settings_id' => 1))[0]->settings_tax;
-				$totalTax = $billing_total - ($billing_total / $tax);
+				$totalTax = ($billing_total / $tax);
 				$totalTax = round($totalTax, 2);
 			}
 			$data = array(
@@ -175,6 +175,7 @@ class Payments extends CI_Controller {
 				"stay_type" => $stay_type,
 				"billing_total" => $billing_total,
 				"totalTax" => $totalTax,
+				"tax" => $tax,
 				"fullname" => $fullname,
 				"email" => $guest->guest_email,
 			);

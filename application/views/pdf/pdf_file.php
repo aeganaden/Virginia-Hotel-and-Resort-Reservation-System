@@ -4,7 +4,10 @@
 	<title><?=$title?></title>
 	<style>
 	.bord1{
-		border:solid 2px  black;
+		border:solid 2px black;
+	}
+	.bord2{
+		border:solid 2px pink;
 	}
 	img {
 		height:auto;
@@ -93,15 +96,33 @@ $room_type = $room_type[0];
 				<?php endforeach?>
 			</div>
 			<div style="margin-top: 20px;"></div>
-			<div style="margin-left: 500px; font-size: 20px;">
-				<span>
+			<!-- vertically-centered -->
+			<div style="font-size: 18px;">
+				<div style="margin-left: 480px;">
+					<strong>Subtotal:</strong> P<?=number_format($billing_total - $totalTax)?>
+				</div>
+				<div style="margin-left: 463px; margin-top: -5px;">
+					<strong>VAT (<?=$tax . '%'?>):</strong> P<?=number_format($totalTax)?>
+				</div>
+				<div style="margin-left: 492px; margin-top: -5px;">
 					<strong>TOTAL:</strong> P<?=number_format($billing_total)?>
+				</div>
+			</div>
+
+			<!-- vertically-centered from left side -->
+			<!-- <div style="margin-left: 480px;font-size: 18px;">
+				<span>
+					<strong>Subtotal:</strong> P<?=number_format($billing_total - $totalTax)?>
 				</span>
 				<br>
 				<span>
-					<strong>TAX:</strong> P<?=number_format($totalTax)?>
+					<strong>VAT (<?=$tax . '%'?>):</strong> P<?=number_format($totalTax)?>
 				</span>
-			</div>
+				<br>
+				<span>
+					<strong>TOTAL:</strong> P<?=number_format($billing_total)?>
+				</span>
+			</div> -->
 		</div>
 	</div>
 
