@@ -271,6 +271,7 @@ $(document).ready(function() {
 					// totalFee
 					$(".totalFee").html('P'+ numeral(data.billing[0].billing_price).format('0,0'));
 					$(".titleKey").html(rKey);
+					$('#downloadReports').attr('data-id', rKey);
 					$("#checkin").html(moment.unix(data.reservation_in).format("MMMM Do, YYYY"));
 					$("#checkout").html(moment.unix(data.reservation_out).format("MMMM Do, YYYY"));
 					$("#lengthStay").html(data.stay_length + " Day/s");
@@ -1064,7 +1065,10 @@ $(".btnDenyRes").click(function(event) {
 	});
 });
 
-
+$("#downloadReports").on("click", function() {
+	var key = $(this).data('id');
+	window.open(base_url + 'Moderator/downloadPDF/' + key);
+});
 
 });
 
