@@ -96,7 +96,70 @@ $(document).ready(function() {
 		});
 		
 	});
+
+	/*=========================================
+	=            UPDATE DATE ADMIN            =
+	=========================================*/
+	let defaultDate = ''; 
 	
+	$(".btnEditDate").click(function(event) {
+		let id = $(this).data('id');
+		$(".inputEditDate"+id).removeAttr('disabled');
+		defaultDate = $(".inputEditDate"+id).val();
+		$(".btnClose"+id).css('visibility', '');
+		$(this).css('visibility', 'hidden');
+		$(".btnSubmit"+id).css('visibility', '');
+
+	});
+	
+	$(".btnClose").click(function(event) {
+		let id = $(this).data('id');
+		$(".inputEditDate"+id).attr('disabled','true');
+		$(".inputEditDate"+id).val(defaultDate);
+		$(this).css('visibility', 'hidden');
+		$('.btnSubmit'+id).css('visibility', 'hidden');
+		$('.btnEditDate'+id).css('visibility', '');
+
+	});
+
+	$(".btnSubmit").click(function(event) { 
+		let id = $(this).data('id');
+		const checkIn= $(this).data('in'); 
+		const checkOut= $(".inputEditDate"+id).val();
+		const res_key = $(this).data('key'); 
+		if (moment(checkOut).isBefore(checkIn)) {  
+			M.toast({html: 'You have selected a date that is less than the check in date!'})
+		}else if (!checkOut) {
+			M.toast({html: 'Check out date cannot be empty.'})
+		}else{
+			$.ajax({
+				url: base_url + 'Moderator/updateDate',
+				type: 'post',
+				dataType: 'json',
+				data: { 
+					checkOut,
+					res_key
+				},
+				success: function(data){
+					if (data == true) {
+						$(".inputEditDate"+id).attr('disabled','true');
+						$(".inputEditDate"+id).val(checkOut);
+						$('.btnClose'+id).css('visibility', 'hidden'); 
+						$('.btnSubmit'+id).css('visibility', 'hidden'); 
+						$('.btnEditDate'+id).css('visibility', '');
+						M.toast({html: 'Succesfully updated date'});
+
+					}else{
+						console.log(data)
+					}
+				}
+			});
+			
+		}
+	});
+	/*=====  End of UPDATE DATE ADMIN  ======*/
+
+
 	/*=================================
 	=            CHARTS JS            =
 	=================================*/

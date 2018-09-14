@@ -25,6 +25,8 @@
 					<thead>
 						<tr>
 							<th>Reservation Key</th>
+							<th>Reserved By</th>
+							<th>Phone Number</th>
 							<th>Reserved at</th>
 							<th>Check in Date</th>
 							<th>Check out Date</th> 
@@ -32,14 +34,16 @@
 							<th>Bank Slip</th>
 							<th>Action</th>
 						</tr>
-					</thead> 
-
+					</thead>  
 					<tbody>
 						<?php if ($reservations): ?>
 							<?php foreach ($reservations as $key => $value): ?>
 								<?php if ($value->reservation_key!=$previousValue): ?> 
+									<?php $fetchGuestDetails = $this->Crud->fetch('guest', array('guest_id'=>$value->guest_id)) ?>
 									<tr>
 										<td><?=$value->reservation_key?></td>
+										<td><?= $fetchGuestDetails[0]->guest_firstname." ".$fetchGuestDetails[0]->guest_lastname ?></td>
+										<td><?=$fetchGuestDetails[0]->guest_phone?></td>
 										<td><?=date('M d, Y - h:i A', $value->reservation_reserved_at)?></td>
 										<td><?=date('M d, Y', $value->reservation_in)?></td>
 										<td><?=date('M d, Y', $value->reservation_out)?></td> 
@@ -65,7 +69,9 @@
 									<td></td> 
 									<td></td> 
 									<td></td>  
-								</tr> 
+									<td></td>  
+									<td></td>  
+								</tr>  
 							<?php endif ?>
 						</tbody>
 					</table>

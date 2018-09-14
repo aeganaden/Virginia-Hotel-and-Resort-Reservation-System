@@ -31,7 +31,7 @@
 				// Compute length of stay
 				$datetime1 = new DateTime(date('Y-m-d',$reservation[0]->reservation_in)); 
 				$datetime2 = new DateTime(date('Y-m-d',$reservation[0]->reservation_out));
-				$difference = $datetime1->diff($datetime2);
+				$interval = date_diff($datetime1, $datetime2); 
 
 
 				?>
@@ -64,7 +64,7 @@
 											<div class="row">
 												<div class="input-field col s6">
 													<i class="material-icons prefix">hourglass_empty</i>
-													<input disabled value="<?=$difference->d+1?> Day/s" id="lengthStay" name="lengthStay" type="text" class="validate white-text lengthStay">
+													<input disabled value="<?=$interval->format("%a")+1?> Day/s" id="lengthStay" name="lengthStay" type="text" class="validate white-text lengthStay">
 													<label for="lengthStay"><span class="white-text">Length of Stay</span></label>
 												</div>
 												<div class="input-field col s6">

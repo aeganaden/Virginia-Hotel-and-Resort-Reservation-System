@@ -50,6 +50,20 @@ class Moderator extends CI_Controller {
 		}
 	} 
 
+	public function updateDate()
+	{ 
+		$checkout = strtotime($this->input->post('checkOut'));
+		$res_key = $this->input->post('res_key');
+		$data = array(
+			"reservation_out"=>$checkout
+		);
+		if ($this->Crud->update("reservation",$data,array("reservation_key"=>$res_key))) {
+			echo json_encode(true);
+		}else{
+			echo json_encode("An error updating the database occured");
+		}
+	}
+
 	public function modifyRooms()
 	{
 		$moderData = $this->session->userdata('moderdata'); 

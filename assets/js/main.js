@@ -682,6 +682,7 @@ function returnButton(step) {
   break;
 
   case "2":
+  totalPax = 0;
   previousStep(2)
   break;
 

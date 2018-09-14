@@ -75,7 +75,12 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<strong>Check Out:</strong> <?=date('M d, Y - h:i A', $reservation[0]->reservation_out)?>
 				<div style="margin-top: 5px;"></div>
-				<strong>Length of Stay:</strong> <?=$difference->d + 1?> Day/s
+				<?php
+				$datetime1 = new DateTime(date('Y-m-d',$reservation[0]->reservation_in)); 
+				$datetime2 = new DateTime(date('Y-m-d',$reservation[0]->reservation_out));
+				$interval = date_diff($datetime1, $datetime2); 
+				?>
+				<strong>Length of Stay:</strong> <?=$interval->format("%a")+1?> Day/s
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<strong>Stay Type:</strong> <?=$stay_type?>
