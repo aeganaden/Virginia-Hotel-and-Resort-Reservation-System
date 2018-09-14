@@ -125,8 +125,10 @@ $room_type = $room_type[0];
 			</div> -->
 		</div>
 	</div>
-
-	<div style="margin-top: 100px;"></div>
+	<div style="text-align: right;margin-top: 100px;">
+		<strong>Employee Name:</strong> <?=strtoupper($fullname)?>
+	</div>
+	<div style="margin-top: 10px;"></div>
 	<div class="footer" style=""> <!-- footer -->
 		<div style="margin-top: 5px;"></div>
 		<span style="font-weight: bold;font-size: 17px;">Virginia & Boy Lodge and Resort</span><br>

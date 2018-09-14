@@ -386,6 +386,7 @@ class Moderator extends CI_Controller {
 
 	public function downloadPDF() {
 		if (!empty($id = $this->uri->segment(3))) {
+			$fullname = strtoupper($moderData['data'][0]->moderator_firstname . " " . $moderData['data'][0]->moderator_lastname);
 			require_once './application/vendor/autoload.php';
 			$reservation = $this->Crud->fetch('reservation', array('reservation_key' => $id));
 			if ($reservation) {
@@ -428,6 +429,7 @@ class Moderator extends CI_Controller {
 				"tax" => $tax,
 				"fullname" => $fullname,
 				"email" => $guest->guest_email,
+				"fullname" => $fullname,
 			);
 
 			$mpdf = new \Mpdf\Mpdf();

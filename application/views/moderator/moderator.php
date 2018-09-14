@@ -433,7 +433,7 @@ $tax = $tax[0];
 				<a href="#!" class="modal-close waves-effect waves-light btn left red"><i class="material-icons left">close</i>CLOSE</a>
 				<a href="#!" class="waves-effect waves-light btn orange accent-3 right btnCheckout"><i class="material-icons right">input</i>CHECKOUT</a>
 				<a href="#addBills" class="modal-trigger waves-effect waves-light btnAddBills btn blue right" style="margin-right: 3%;"><i class="material-icons right">add</i>ADD BILLS</a>
-				<a href="#" id="downloadReports" class="waves-effect waves-light btn green right" style="margin-right: 3%;"><i class="material-icons right">receipt</i>RECEIPT</a>
+				<a href="#" id="downloadPdf" class="waves-effect waves-light btn green right" style="margin-right: 3%;"><i class="material-icons right">receipt</i>RECEIPT</a>
 			</div>
 		</div>
 
