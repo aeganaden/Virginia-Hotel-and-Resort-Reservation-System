@@ -1,11 +1,11 @@
 	<?php
-$reservation = $this->Crud->fetch('reservation', array('reservation_key' => $transactionID));
-if ($reservation) {
-	$guest = $this->Crud->fetch('guest', array('guest_id' => $reservation[0]->guest_id));
-	$guest = $guest[0];
-	$fullname = $guest->guest_firstname . " " . $guest->guest_lastname;
-}
-?>
+	$reservation = $this->Crud->fetch('reservation', array('reservation_key' => $transactionID));
+	if ($reservation) {
+		$guest = $this->Crud->fetch('guest', array('guest_id' => $reservation[0]->guest_id));
+		$guest = $guest[0];
+		$fullname = $guest->guest_firstname . " " . $guest->guest_lastname;
+	}
+	?>
 	<?php if ($reservation): ?>
 		<?php $this->load->view('includes/materialize/sidenav', compact('fullname', 'guest', 'reservation'));?>
 
@@ -26,14 +26,14 @@ if ($reservation) {
 				</div>
 
 				<?php
-$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay";
-
-// Compute length of stay
-$datetime1 = new DateTime(date('Y-m-d', $reservation[0]->reservation_in));
-$datetime2 = new DateTime(date('Y-m-d', $reservation[0]->reservation_out));
-$difference = $datetime1->diff($datetime2);
-
-?>
+				$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay";
+				
+				// Compute length of stay
+				$datetime1 = new DateTime(date('Y-m-d',$reservation[0]->reservation_in)); 
+				$datetime2 = new DateTime(date('Y-m-d',$reservation[0]->reservation_out));
+				$interval = date_diff($datetime1, $datetime2); 
+				
+				?>
 
 				<div class="row" id="paymentDiv">
 					<div class="card light-blue darken-4">
@@ -63,7 +63,9 @@ $difference = $datetime1->diff($datetime2);
 											<div class="row">
 												<div class="input-field col s6">
 													<i class="material-icons prefix">hourglass_empty</i>
-													<input disabled value="<?=$difference->d + 1?> Day/s" id="lengthStay" name="lengthStay" type="text" class="validate white-text lengthStay">
+													
+													<input disabled value="<?=$interval->format("%a")+1?> Day/s" id="lengthStay" name="lengthStay" type="text" class="validate white-text lengthStay">
+													
 													<label for="lengthStay"><span class="white-text">Length of Stay</span></label>
 												</div>
 												<div class="input-field col s6">
@@ -87,9 +89,9 @@ $difference = $datetime1->diff($datetime2);
 											</div>
 											<?php foreach ($reservation as $key => $value): ?>
 												<?php
-$room_type = $this->Crud->fetch('room_type', array("room_type_id" => $value->room_type_id));
-$room_type = $room_type[0];
-?>
+												$room_type = $this->Crud->fetch('room_type', array("room_type_id" => $value->room_type_id));
+												$room_type = $room_type[0];
+												?>
 												<?php if ($reservation[$key]->reservation_roomCount > 0): ?>
 													<div class="row">
 														<div class="input-field col s4">
@@ -114,20 +116,20 @@ $room_type = $room_type[0];
 												<?php endif?>
 											<?php endforeach?>
 											<?php
-$billing = $this->Crud->fetch('billing', array('reservation_key' => $reservation[0]->reservation_key));
-$billing_total = 0;
-$billing_total_negative = 0;
-foreach ($billing as $key => $value) {
-	$billing_total += ($value->billing_price * $value->billing_quantity);
-	if ($value->billing_price * $value->billing_quantity > 0) {
-	} else {
-		$billing_total_negative += ($value->billing_price * $value->billing_quantity) * -1;
-	}
+											$billing = $this->Crud->fetch('billing', array('reservation_key' => $reservation[0]->reservation_key));
+											$billing_total = 0;
+											$billing_total_negative = 0;
+											foreach ($billing as $key => $value) {
+												$billing_total += ($value->billing_price * $value->billing_quantity);
+												if ($value->billing_price * $value->billing_quantity > 0) {
+												} else {
+													$billing_total_negative += ($value->billing_price * $value->billing_quantity) * -1;
+												}
 	// echo "$billing_total"."<br>";
-}
-$billing_total = $billing_total + $billing_total_negative;
-$miscs = $this->Crud->fetch_like('billing', 'billing_name', 'Misc.', array('reservation_key' => $reservation[0]->reservation_key));
-?>
+											}
+											$billing_total = $billing_total + $billing_total_negative;
+											$miscs = $this->Crud->fetch_like('billing', 'billing_name', 'Misc.', array('reservation_key' => $reservation[0]->reservation_key));
+											?>
 
 											<?php if ($miscs): ?>
 												<div class="row">

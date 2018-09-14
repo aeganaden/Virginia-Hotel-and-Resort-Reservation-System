@@ -31,6 +31,7 @@
 						<th>Reservation Status</th>
 						<th>Reservation Requests</th>
 						<th>Guest Details</th>
+						
 					</thead>
 					<tbody>
 						<?php foreach ($reservations as $key => $value): ?>
@@ -64,7 +65,21 @@
 							<tr>
 								<td><?=$value->reservation_key?></td>
 								<td><?=date('M d, Y',$value->reservation_in)?></td>
-								<td><?=date('M d, Y',$value->reservation_out)?></td>
+								<td> 
+									<div class="row valign-wrapper">
+										<div class="col s8">
+											<input  type="text" disabled="" value="<?=date('M d, Y',$value->reservation_out)?>" class="datepicker inputEditDate<?=$key?>">
+										</div>
+										<div class="col s4">
+											<i class="material-icons btnEditDate btnEditDate<?=$key?>"   data-id="<?=$key?>"  style="cursor: pointer;">edit</i>
+											<i class="material-icons red-text btnClose btnClose<?=$key?>" data-id="<?=$key?>"  style="cursor: pointer; visibility: hidden">close</i>
+
+											<i class="material-icons btnSubmit btnSubmit<?=$key?>" data-in="<?=date('M d, Y',$value->reservation_in)?>"  data-key="<?=$value->reservation_key?>" data-id="<?=$key?>"  style="cursor: pointer; visibility: hidden;">arrow_forward</i>
+											
+										</div>
+									</div>
+									
+								</td>
 								<td><span class="<?=$status_color?>"><?=$status?></span></td>
 								<td><?=$value->reservation_requests?></td>
 								<td><button class="btn waves-effect waves-light modal-trigger btnShowGuestDetails" data-target="guestDetails" data-id="<?=$value->guest_id?>"><i class="material-icons right">remove_red_eye</i>view</button></td>

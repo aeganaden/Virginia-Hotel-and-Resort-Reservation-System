@@ -18,28 +18,33 @@
 
 			<div id="pendingReservations" class="col s12 datatables">
 				<?php
-$reservations = $this->Crud->fetch('reservation', array('reservation_status' => 2, 'reservation_payment_status' => 1));
-$previousValue = null;
-?>
+				$reservations = $this->Crud->fetch('reservation', array('reservation_status' => 2, 'reservation_payment_status' => 1));
+				$previousValue = null;
+				?>
 				<table class="reponsive-table datatable">
 					<thead>
 						<tr>
 							<th>Reservation Key</th>
+							<th>Reserved By</th>
+							<th>Phone Number</th>
 							<th>Reserved at</th>
 							<th>Check in Date</th>
 							<th>Check out Date</th>
 							<th>Stay Type</th>
 							<th>Bank Slip</th>
 							<th>Action</th>
-						</tr>
-					</thead>
-
+						</tr> 
+					</thead>  
 					<tbody>
 						<?php if ($reservations): ?>
 							<?php foreach ($reservations as $key => $value): ?>
-								<?php if ($value->reservation_key != $previousValue): ?>
+								<?php if ($value->reservation_key!=$previousValue): ?> 
+									<?php $fetchGuestDetails = $this->Crud->fetch('guest', array('guest_id'=>$value->guest_id)) ?>
+									
 									<tr>
 										<td><?=$value->reservation_key?></td>
+										<td><?= $fetchGuestDetails[0]->guest_firstname." ".$fetchGuestDetails[0]->guest_lastname ?></td>
+										<td><?=$fetchGuestDetails[0]->guest_phone?></td>
 										<td><?=date('M d, Y - h:i A', $value->reservation_reserved_at)?></td>
 										<td><?=date('M d, Y', $value->reservation_in)?></td>
 										<td><?=date('M d, Y', $value->reservation_out)?></td>
@@ -57,16 +62,18 @@ $previousValue = null;
 								<?php $previousValue = $value->reservation_key;?>
 							<?php endforeach?>
 							<?php else: ?>
-								<tr>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td class="center">NO PENDING RESERVATION</td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr>
-							<?php endif?>
+								<tr> 
+									<td></td> 
+									<td></td> 
+									<td></td> 
+									<td class="center">NO PENDING RESERVATION</td> 
+									<td></td> 
+									<td></td> 
+									<td></td>  
+									<td></td>  
+									<td></td>  
+								</tr>  
+							<?php endif ?> 
 						</tbody>
 					</table>
 				</div>
@@ -264,9 +271,9 @@ $previousValue = null;
 													</div>
 													<?php
 // FETCH TAX
-$tax = $this->Crud->fetch('settings');
-$tax = $tax[0];
-?>
+													$tax = $this->Crud->fetch('settings');
+													$tax = $tax[0];
+													?>
 													<div class="row">
 														<p><b>Room Costs</b> <span class="right totalRoomCosts yellow-text">P1000</span></p>
 														<p><b>Length of Stay</b> <span class="right stayLength yellow-text">P1000</span></p>
