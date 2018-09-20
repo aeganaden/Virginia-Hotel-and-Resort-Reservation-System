@@ -44,24 +44,21 @@ class Moderator extends CI_Controller {
 		}
 	}
 
-	
-	public function updateDate()
-	{ 
+	public function updateDate() {
 		$checkout = strtotime($this->input->post('checkOut'));
 		$res_key = $this->input->post('res_key');
 		$data = array(
-			"reservation_out"=>$checkout
+			"reservation_out" => $checkout,
 		);
-		if ($this->Crud->update("reservation",$data,array("reservation_key"=>$res_key))) {
+		if ($this->Crud->update("reservation", $data, array("reservation_key" => $res_key))) {
 			echo json_encode(true);
-		}else{
+		} else {
 			echo json_encode("An error updating the database occured");
 		}
 	}
 
-	public function modifyRooms()
-	{
-		$moderData = $this->session->userdata('moderdata');  
+	public function modifyRooms() {
+		$moderData = $this->session->userdata('moderdata');
 		if (!$moderData) {
 			$title = "Moderator - Login";
 			$this->load->view('includes/materialize/header', compact('title'));
@@ -402,7 +399,8 @@ class Moderator extends CI_Controller {
 
 	public function downloadPDF() {
 		if (!empty($id = $this->uri->segment(3))) {
-			$fullname = strtoupper($moderData['data'][0]->moderator_firstname . " " . $moderData['data'][0]->moderator_lastname);
+			$moderData = $this->session->userdata('moderdata');
+			$employee = strtoupper($moderData['data'][0]->moderator_firstname . " " . $moderData['data'][0]->moderator_lastname);
 			require_once './application/vendor/autoload.php';
 			$reservation = $this->Crud->fetch('reservation', array('reservation_key' => $id));
 			if ($reservation) {
@@ -445,7 +443,7 @@ class Moderator extends CI_Controller {
 				"tax" => $tax,
 				"fullname" => $fullname,
 				"email" => $guest->guest_email,
-				"fullname" => $fullname,
+				"employee" => $employee,
 			);
 
 			$mpdf = new \Mpdf\Mpdf();

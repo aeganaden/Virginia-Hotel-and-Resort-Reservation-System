@@ -76,11 +76,11 @@
 				<strong>Check Out:</strong> <?=date('M d, Y - h:i A', $reservation[0]->reservation_out)?>
 				<div style="margin-top: 5px;"></div>
 				<?php
-				$datetime1 = new DateTime(date('Y-m-d',$reservation[0]->reservation_in)); 
-				$datetime2 = new DateTime(date('Y-m-d',$reservation[0]->reservation_out));
-				$interval = date_diff($datetime1, $datetime2); 
-				?>
-				<strong>Length of Stay:</strong> <?=$interval->format("%a")+1?> Day/s
+$datetime1 = new DateTime(date('Y-m-d', $reservation[0]->reservation_in));
+$datetime2 = new DateTime(date('Y-m-d', $reservation[0]->reservation_out));
+$interval = date_diff($datetime1, $datetime2);
+?>
+				<strong>Length of Stay:</strong> <?=$interval->format("%a") + 1?> Day/s
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<strong>Stay Type:</strong> <?=$stay_type?>
@@ -131,7 +131,7 @@ $room_type = $room_type[0];
 		</div>
 	</div>
 	<div style="text-align: right;margin-top: 100px;">
-		<strong>Employee Name:</strong> <?=strtoupper($fullname)?>
+		<strong>Employee Name:</strong> <?=strtoupper($employee)?>
 	</div>
 	<div style="margin-top: 10px;"></div>
 	<div class="footer" style=""> <!-- footer -->
