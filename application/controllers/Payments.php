@@ -133,76 +133,77 @@ class Payments extends CI_Controller {
 
 	}
 
-	// public function downloadPDF() {
-	// 	if (!empty($id = $this->uri->segment(3))) {
-	// 		require_once './application/vendor/autoload.php';
+	public function downloadPDF() {
+		if (!empty($id = $this->uri->segment(3))) {
+			require_once './application/vendor/autoload.php';
 
-	// 		$reservation = $this->Crud->fetch('reservation', array('reservation_key' => $id));
-	// 		if ($reservation) {
-	// 			$guest = $this->Crud->fetch('guest', array('guest_id' => $reservation[0]->guest_id));
-	// 			$guest = $guest[0];
-	// 			$fullname = $guest->guest_firstname . " " . $guest->guest_lastname;
+			$reservation = $this->Crud->fetch('reservation', array('reservation_key' => $id));
+			if ($reservation) {
+				$guest = $this->Crud->fetch('guest', array('guest_id' => $reservation[0]->guest_id));
+				$guest = $guest[0];
+				$fullname = $guest->guest_firstname . " " . $guest->guest_lastname;
 
-	// 			$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay";
+				$stay_type = $reservation[0]->reservation_day_type == 1 ? "Day Stay" : "Night Stay";
 
-	// 			// Compute length of stay
-	// 			$datetime1 = new DateTime(date('Y-m-d', $reservation[0]->reservation_in));
-	// 			$datetime2 = new DateTime(date('Y-m-d', $reservation[0]->reservation_out));
-	// 			$difference = $datetime1->diff($datetime2);
+				// Compute length of stay
+				$datetime1 = new DateTime(date('Y-m-d', $reservation[0]->reservation_in));
+				$datetime2 = new DateTime(date('Y-m-d', $reservation[0]->reservation_out));
+				$difference = $datetime1->diff($datetime2);
 
-	// 			$billing = $this->Crud->fetch('billing', array('reservation_key' => $reservation[0]->reservation_key));
-	// 			$billing_total = 0;
-	// 			$billing_total_negative = 0;
-	// 			foreach ($billing as $key => $value) {
-	// 				$billing_total += ($value->billing_price * $value->billing_quantity);
-	// 				if ($value->billing_price * $value->billing_quantity > 0) {
-	// 				} else {
-	// 					$billing_total_negative += ($value->billing_price * $value->billing_quantity) * -1;
-	// 				}
-	// 			}
-	// 			$billing_total = $billing_total + $billing_total_negative;
-	// 			$tax = $this->Crud->fetch('settings', array('settings_id' => 1))[0]->settings_tax;
-	// 			$totalTax = ($billing_total / $tax);
-	// 			$totalTax = round($totalTax, 2);
-	// 		}
-	// 		$data = array(
-	// 			"title" => "PDF",
-	// 			"id" => $id,
-	// 			"reservation" => $reservation,
-	// 			"datetime1" => $datetime1,
-	// 			"datetime2" => $datetime2,
-	// 			"difference" => $difference,
-	// 			"stay_type" => $stay_type,
-	// 			"billing_total" => $billing_total,
-	// 			"totalTax" => $totalTax,
-	// 			"tax" => $tax,
-	// 			"fullname" => $fullname,
-	// 			"email" => $guest->guest_email,
-	// 		);
+				$billing = $this->Crud->fetch('billing', array('reservation_key' => $reservation[0]->reservation_key));
+				$billing_total = 0;
+				$billing_total_negative = 0;
+				foreach ($billing as $key => $value) {
+					$billing_total += ($value->billing_price * $value->billing_quantity);
+					if ($value->billing_price * $value->billing_quantity > 0) {
+					} else {
+						$billing_total_negative += ($value->billing_price * $value->billing_quantity) * -1;
+					}
+				}
+				$billing_total = $billing_total + $billing_total_negative;
+				$tax = $this->Crud->fetch('settings', array('settings_id' => 1))[0]->settings_tax;
+				$totalTax = ($billing_total / $tax);
+				$totalTax = round($totalTax, 2);
+			}
+			$data = array(
+				"title" => "PDF",
+				"id" => $id,
+				"reservation" => $reservation,
+				"datetime1" => $datetime1,
+				"datetime2" => $datetime2,
+				"difference" => $difference,
+				"stay_type" => $stay_type,
+				"billing_total" => $billing_total,
+				"totalTax" => $totalTax,
+				"tax" => $tax,
+				"fullname" => $fullname,
+				"email" => $guest->guest_email,
+				"employee" => "N/A"
+			);
 
-	// 		$mpdf = new \Mpdf\Mpdf();
+			$mpdf = new \Mpdf\Mpdf();
 
-	// 		// Buffer the following html with PHP so we can store it to a variable later
-	// 		ob_start();
+			// Buffer the following html with PHP so we can store it to a variable later
+			ob_start();
 
-	// 		// This is where your script would normally output the HTML using echo or print
-	// 		$this->load->view('pdf/pdf_file', $data); //last-mark
+			// This is where your script would normally output the HTML using echo or print
+			$this->load->view('pdf/pdf_file', $data); //last-mark
 
-	// 		// Now collect the output buffer into a variable
-	// 		$html = ob_get_contents();
-	// 		ob_end_clean();
+			// Now collect the output buffer into a variable
+			$html = ob_get_contents();
+			ob_end_clean();
 
-	// 		// send the captured HTML from the output buffer to the mPDF class for processing
-	// 		$mpdf->WriteHTML($html);
-	// 		if (file_exists('assets/uploads/pdfs/pdf_' . $id . '.pdf')) {
-	// 			unlink('assets/uploads/pdfs/pdf_' . $id . '.pdf');
-	// 		}
-	// 		$mpdf->Output('assets/uploads/pdfs/pdf_' . $id . '.pdf');
-	// 		echo json_encode(base_url() . 'assets/uploads/pdfs/pdf_' . $id . '.pdf');
-	// 	} else {
-	// 		echo json_encode("error");
-	// 	}
-	// }
+			// send the captured HTML from the output buffer to the mPDF class for processing
+			$mpdf->WriteHTML($html);
+			if (file_exists('assets/uploads/pdfs/pdf_' . $id . '.pdf')) {
+				unlink('assets/uploads/pdfs/pdf_' . $id . '.pdf');
+			}
+			$mpdf->Output('assets/uploads/pdfs/pdf_' . $id . '.pdf');
+			echo json_encode(base_url() . 'assets/uploads/pdfs/pdf_' . $id . '.pdf');
+		} else {
+			echo json_encode("error");
+		}
+	}
 
 }
 
