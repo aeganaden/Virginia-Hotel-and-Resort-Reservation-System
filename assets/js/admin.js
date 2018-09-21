@@ -59,11 +59,20 @@ $(document).ready(function() {
 					$(".stayLength").html(dates.length + " Day/s"); 
 					$(".checkOutDate").html(moment(to_date.toLocaleString('en-US',options).split(",")[0]).format('MMM DD, YYYY')); 
 				}
-			})
-
+			}) 
 		} 
-	})	
+	})
 
+	M.Datepicker.init(Calendar[1],{ 
+		showClearBtn: false,
+		autoClose: true,  
+		minDate: new Date(),
+		onSelect: function(to_date){
+			let dates = getDates(new Date(date),new Date(to_date));
+			$(".stayLength").html(dates.length + " Day/s"); 
+			$(".checkOutDate").html(moment(to_date.toLocaleString('en-US',options).split(",")[0]).format('MMM DD, YYYY')); 
+		}
+	}) 
 
 	/*==================================================
 	=            SETTING OF DATA - ONCHANGE            =
@@ -211,74 +220,82 @@ $(document).ready(function() {
 				}
 				dailyData.push(totalDaily); 
 
-				var daily = document.getElementById("dailyReport").getContext('2d');
-				var weekly = document.getElementById("weeklyReport").getContext('2d');
-				var monthly = document.getElementById("monthlyReport").getContext('2d');
-				var DailyChart = new Chart(daily, {
-					type: 'bar',
-					data: {
-						labels: ["Today's Sale"],
-						datasets: [{
-							label: 'Total Income',
-							data: dailyData,
-							backgroundColor: [
-							'rgba(255, 99, 132, 0.2)' 
-							],
-							borderColor: [
-							'rgba(255,99,132,1)', 
-							],
-							borderWidth: 1
-						}]
-					},
-					options: {
-						scales: {
-							yAxes: [{
-								ticks: {
-									beginAtZero:true
-								}
+				var daily = document.getElementById("dailyReport") !== null ? document.getElementById("dailyReport").getContext('2d'): '';
+				var weekly = document.getElementById("weeklyReport") !== null ? document.getElementById("weeklyReport").getContext('2d'): '';
+				var monthly = document.getElementById("monthlyReport") !== null ? document.getElementById("monthlyReport").getContext('2d'): '';
+				
+				if (daily) {
+					var DailyChart = new Chart(daily, {
+						type: 'bar',
+						data: {
+							labels: ["Today's Sale"],
+							datasets: [{
+								label: 'Total Income',
+								data: dailyData,
+								backgroundColor: [
+								'rgba(255, 99, 132, 0.2)' 
+								],
+								borderColor: [
+								'rgba(255,99,132,1)', 
+								],
+								borderWidth: 1
 							}]
+						},
+						options: {
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero:true
+									}
+								}]
+							}
 						}
-					}
-				});
-				var WeeklyChart = new Chart(weekly, {
-					type: 'bar',
-					data: {
-						labels: weeklyLabel,
-						datasets: [{
-							label: 'Weekly Income',
-							data: weeklyData, 
-						}]
-					},
-					options: {
-						scales: {
-							yAxes: [{
-								ticks: {
-									beginAtZero:true
-								}
+					});
+				}
+				
+				if (weekly) {
+					var WeeklyChart = new Chart(weekly, {
+						type: 'bar',
+						data: {
+							labels: weeklyLabel,
+							datasets: [{
+								label: 'Weekly Income',
+								data: weeklyData, 
 							}]
+						},
+						options: {
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero:true
+									}
+								}]
+							}
 						}
-					}
-				});
+					});
+				}
 
-				var MonthlyChart = new Chart(monthly, {
-					type: 'bar',
-					data: {
-						labels: monthlyLabel,
-						datasets: [{
-							label: 'monthly Income',
-							data: monthlyData, 
-						}]
-					},
-					options: {
-						scales: {
-							yAxes: [{
-								ticks: {
-									beginAtZero:true
-								}
+				if (monthly) {
+					var MonthlyChart = new Chart(monthly, {
+						type: 'bar',
+						data: {
+							labels: monthlyLabel,
+							datasets: [{
+								label: 'monthly Income',
+								data: monthlyData, 
 							}]
+						},
+						options: {
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero:true
+									}
+								}]
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		});
 		
