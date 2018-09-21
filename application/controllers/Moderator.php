@@ -50,11 +50,39 @@ class Moderator extends CI_Controller {
 		$data = array(
 			"reservation_out" => $checkout,
 		);
-		if ($this->Crud->update("reservation", $data, array("reservation_key" => $res_key))) {
-			echo json_encode(true);
-		} else {
-			echo json_encode("An error updating the database occured");
+		// fetch reservation details
+		$res_details = $this->Crud->fetch('reservation',array('reservation_key'=>$res_key));
+		$res_details = $res_details[0];
+		$check_out_def=  $res_details->reservation_out;
+
+	 	// fetch room details
+		$room_type = $this->Crud->fetch('room_type',array('room_type_id'=>$res_details->room_type_id));
+		$room_type = $room_type[0];
+		$room_price = (int) $room_type->room_type_price;
+
+		// compute additional billing
+		$date1=date_create(date('M d, Y',$check_out_def));
+		$date2=date_create(date('M d, Y',$checkout)); 
+		$date_differrence =  date_diff($date1,$date2)->format("%a");
+		$add_fee = $room_price * $date_differrence;
+		// $diff = $date_differrence->d;
+		// echo $room_price."-";
+		// echo $date_differrence."-";
+		// echo $res_key."-";
+		// echo $check_out_def."-";
+		// echo date('M d, Y',$check_out_def)."-";
+		// echo date('M d, Y',$checkout)."-";
+		// print_r ($date_differrence);
+		// echo $add_fee;
+		// die();
+		if ($this->Crud->insert('billing',array('billing_price'=>$add_fee,"billing_name"=>"Misc. Extended Stay","billing_quantity"=>1,"reservation_key"=>$res_key))) {
+			if ($this->Crud->update("reservation", $data, array("reservation_key" => $res_key))) {
+				echo json_encode(true);
+			} else {
+				echo json_encode("An error updating the database occured");
+			}
 		}
+		
 	}
 
 	public function modifyRooms() {
