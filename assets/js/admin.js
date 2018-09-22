@@ -109,7 +109,7 @@ $(document).ready(function() {
 	=========================================*/
 	let defaultDate = ''; 
 	
-	$(".btnEditDate").click(function(event) {
+	$(".btnEditDate").on('click',function () {
 		let id = $(this).data('id');
 		$(".inputEditDate"+id).removeAttr('disabled');
 		defaultDate = $(".inputEditDate"+id).val();
@@ -119,7 +119,7 @@ $(document).ready(function() {
 
 	});
 	
-	$(".btnClose").click(function(event) {
+	$(".btnClose").on('click',function () {
 		let id = $(this).data('id');
 		$(".inputEditDate"+id).attr('disabled','true');
 		$(".inputEditDate"+id).val(defaultDate);
@@ -129,7 +129,7 @@ $(document).ready(function() {
 
 	});
 
-	$(".btnSubmit").click(function(event) { 
+	$(".btnSubmit").on('click',function () { 
 		let id = $(this).data('id');
 		const checkIn= $(this).data('in'); 
 		const checkOut= $(".inputEditDate"+id).val();
@@ -168,7 +168,7 @@ $(document).ready(function() {
 
 	let defaultDateIn = ''; 
 	
-	$(".btnEditDateIn").click(function(event) {
+	$(".btnEditDateIn").on('click',function () {
 		let id = $(this).data('id');
 		$(".inputEditDateIn"+id).removeAttr('disabled');
 		defaultDateIn = $(".inputEditDateIn"+id).val();
@@ -177,7 +177,7 @@ $(document).ready(function() {
 		$(".btnSubmitIn"+id).css('visibility', '');
 	});
 	
-	$(".btnCloseIn").click(function(event) {
+	$(".btnCloseIn").on('click',function () {
 		let id = $(this).data('id');
 		$(".inputEditDateIn"+id).attr('disabled','true');
 		$(".inputEditDateIn"+id).val(defaultDateIn);
@@ -187,7 +187,7 @@ $(document).ready(function() {
 
 	});
 
-	$(".btnSubmitIn").click(function(event) { 
+	$(".btnSubmitIn").on('click',function () { 
 		let id = $(this).data('id');
 		const checkOut= $(this).data('out'); 
 		const checkIn= $(".inputEditDateIn"+id).val();
