@@ -2,6 +2,7 @@ $(document).ready(function() {
 	$('.datatable').DataTable(); 
 	loadReports();
 	const Calendar = document.querySelectorAll('.datepicker'); 
+	const Calendar2 = document.querySelectorAll('.datepickerMod'); 
 
 	let  from_date = "";  
 	var options = { 
@@ -63,16 +64,13 @@ $(document).ready(function() {
 		} 
 	})
 
-	M.Datepicker.init(Calendar[1],{ 
+	M.Datepicker.init(Calendar2,{ 
 		showClearBtn: false,
 		autoClose: true,  
-		minDate: new Date(),
-		onSelect: function(to_date){
-			let dates = getDates(new Date(date),new Date(to_date));
-			$(".stayLength").html(dates.length + " Day/s"); 
-			$(".checkOutDate").html(moment(to_date.toLocaleString('en-US',options).split(",")[0]).format('MMM DD, YYYY')); 
-		}
+		minDate: new Date()
 	}) 
+
+	
 
 	/*==================================================
 	=            SETTING OF DATA - ONCHANGE            =
@@ -164,6 +162,66 @@ $(document).ready(function() {
 				}
 			});
 			
+		}
+	});
+
+
+	let defaultDateIn = ''; 
+	
+	$(".btnEditDateIn").click(function(event) {
+		let id = $(this).data('id');
+		$(".inputEditDateIn"+id).removeAttr('disabled');
+		defaultDateIn = $(".inputEditDateIn"+id).val();
+		$(".btnCloseIn"+id).css('visibility', '');
+		$(this).css('visibility', 'hidden');
+		$(".btnSubmitIn"+id).css('visibility', '');
+	});
+	
+	$(".btnCloseIn").click(function(event) {
+		let id = $(this).data('id');
+		$(".inputEditDateIn"+id).attr('disabled','true');
+		$(".inputEditDateIn"+id).val(defaultDateIn);
+		$(this).css('visibility', 'hidden');
+		$('.btnSubmitIn'+id).css('visibility', 'hidden');
+		$('.btnEditDateIn'+id).css('visibility', '');
+
+	});
+
+	$(".btnSubmitIn").click(function(event) { 
+		let id = $(this).data('id');
+		const checkOut= $(this).data('out'); 
+		const checkIn= $(".inputEditDateIn"+id).val();
+		const res_key = $(this).data('key'); 
+
+		// console.log(checkIn,checkOut,res_key)
+		if (moment(checkOut).isBefore(checkIn)) {  
+			M.toast({html: 'You have selected a date that is greater than the checkout date!'})
+		}else if (!checkIn) {
+			M.toast({html: 'Check in date cannot be empty.'})
+		}else{
+			$.ajax({
+				url: base_url + 'Moderator/updateDateIn',
+				type: 'post',
+				dataType: 'json',
+				data: { 
+					checkIn,
+					res_key
+				},
+				success: function(data){
+					if (data == true) {
+						$(".inputEditDateIn"+id).attr('disabled','true');
+						$(".inputEditDateIn"+id).val(checkIn);
+						$('.btnCloseIn'+id).css('visibility', 'hidden'); 
+						$('.btnSubmitIn'+id).css('visibility', 'hidden'); 
+						$('.btnEditDateIn'+id).css('visibility', '');
+						M.toast({html: 'Succesfully updated date'});
+
+					}else{
+						console.log(data)
+					}
+				}
+			});
+
 		}
 	});
 	/*=====  End of UPDATE DATE ADMIN  ======*/
